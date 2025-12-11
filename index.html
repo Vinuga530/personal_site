@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Coming Soon</title>
     <style>
-        /* --- CORE VARIABLES --- */
+        /* --- RESET & VARIABLES --- */
         :root {
-            --bg: #030303;
+            --bg: #050505;
             --text-main: #ffffff;
             --text-sub: #888888;
             --font-stack: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -19,104 +19,89 @@
             background-color: var(--bg);
             color: var(--text-main);
             font-family: var(--font-stack);
-            /* Use dynamic viewport height for mobile browsers */
-            height: 100vh;
-            height: 100dvh; 
+            height: 100dvh; /* Dynamic viewport height for mobile */
             width: 100%;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px;
-            /* Prevent bounce effect on iOS */
             overscroll-behavior: none;
         }
 
-        /* --- LAYER 1: FILM GRAIN TEXTURE --- */
+        /* --- BACKGROUND LAYERS --- */
         .noise-overlay {
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-            opacity: 0.07;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.4;
             pointer-events: none;
             z-index: 2;
-            animation: noise-move 0.4s infinite linear;
         }
 
-        @keyframes noise-move {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(10px, 10px); }
-        }
-
-        /* --- LAYER 2: CANVAS (PARTICLES) --- */
         canvas {
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 0;
-            touch-action: none; /* Disable default touch actions */
+            z-index: 1;
         }
 
-        /* --- LAYER 3: CONTENT --- */
+        /* --- CONTENT --- */
         .content {
             position: relative;
             z-index: 10;
             text-align: center;
-            width: 90%; /* Prevent text hitting edges */
-            max-width: 800px;
-            transform-style: preserve-3d;
-            will-change: transform;
-            padding: 20px;
+            width: 100%;
+            padding: 0 20px;
         }
 
         h1 {
-            /* Responsive typography: minimum 2.5rem, preferred 10vw, max 7rem */
-            font-size: clamp(2.5rem, 10vw, 7rem); 
+            font-size: clamp(3rem, 12vw, 6rem);
             font-weight: 800;
-            letter-spacing: -0.04em;
+            letter-spacing: -0.03em;
             line-height: 1.1;
             margin-bottom: 1rem;
             color: transparent;
-            background: linear-gradient(180deg, #fff 0%, #aaa 100%);
+            /* Subtle shimmer gradient */
+            background: linear-gradient(120deg, #ffffff 0%, #a5a5a5 100%);
             -webkit-background-clip: text;
-            
-            opacity: 0;
-            filter: blur(20px);
-            transform: scale(0.9) translateY(30px);
-            animation: cinematicReveal 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-        }
-
-        p {
-            /* Responsive subtitle */
-            font-size: clamp(0.9rem, 3vw, 1.5rem);
-            color: var(--text-sub);
-            font-weight: 400;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
+            background-clip: text;
             
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeUp 1s cubic-bezier(0.19, 1, 0.22, 1) 0.6s forwards;
+            animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* --- KEYFRAMES --- */
-        @keyframes cinematicReveal {
-            to { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); }
+        p {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: var(--text-sub);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            
+            opacity: 0;
+            transform: translateY(10px);
+            animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
         }
-        @keyframes fadeUp {
+
+        @keyframes textReveal {
             to { opacity: 1; transform: translateY(0); }
         }
+
     </style>
 </head>
 <body>
 
+    <!-- Film Grain Texture -->
     <div class="noise-overlay"></div>
+
+    <!-- Particle System -->
     <canvas id="canvas"></canvas>
 
-    <div class="content" id="tilt-card">
+    <!-- Content -->
+    <div class="content">
         <h1>Coming soon!</h1>
         <p>Expect in January.</p>
     </div>
@@ -124,183 +109,155 @@
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        const content = document.getElementById('tilt-card');
         
         let width, height;
         let particles = [];
         
         // Mouse/Touch state
-        const mouse = { x: null, y: null, radius: 150 };
+        let mouse = { x: undefined, y: undefined, radius: 150 };
 
-        // --- RESIZE HANDLER ---
+        // --- RESIZE HANDLING ---
         function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            // Re-initialize particles on resize to prevent distortion
+            // Set canvas resolution to match pixel density for crisp rendering
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+            
             initParticles();
         }
-        window.addEventListener('resize', resize);
 
-        // --- INPUT HANDLING (MOUSE & TOUCH) ---
-        
-        function handleMove(x, y) {
+        // --- INTERACTION HANDLING ---
+        function updateMouse(x, y) {
             mouse.x = x;
             mouse.y = y;
-
-            // Parallax Tilt
-            const centerX = width / 2;
-            const centerY = height / 2;
-            const xOffset = (x - centerX) / centerX;
-            const yOffset = (y - centerY) / centerY;
-
-            // Reduce tilt intensity on mobile for smoother feel
-            const intensity = width < 600 ? 5 : 10; 
-            const rotateX = yOffset * -intensity;
-            const rotateY = xOffset * intensity;
-            
-            content.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         }
 
-        function handleLeave() {
-            mouse.x = null;
-            mouse.y = null;
-            content.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-        }
-
-        // Mouse Events
-        window.addEventListener('mousemove', (e) => handleMove(e.x, e.y));
-        window.addEventListener('mouseleave', handleLeave);
-
-        // Touch Events
-        window.addEventListener('touchmove', (e) => {
-            // Prevent scrolling while touching canvas
+        window.addEventListener('mousemove', e => updateMouse(e.clientX, e.clientY));
+        window.addEventListener('touchmove', e => {
+            // Prevent scrolling on mobile when interacting
             e.preventDefault(); 
-            const touch = e.touches[0];
-            handleMove(touch.clientX, touch.clientY);
+            updateMouse(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: false });
+        
+        window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+        window.addEventListener('touchend', () => { mouse.x = undefined; mouse.y = undefined; });
+        window.addEventListener('resize', resize);
 
-        window.addEventListener('touchend', handleLeave);
-
-
-        // --- PARTICLE SYSTEM ---
+        // --- PARTICLE LOGIC ---
         class Particle {
             constructor() {
+                this.init(true);
+            }
+
+            init(randomY = false) {
                 this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 2 + 0.1;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                // Lighter particles for mobile performance
-                this.density = (Math.random() * 30) + 1; 
+                // If randomY is true, place anywhere (start). If false, place at bottom (respawn)
+                this.y = randomY ? Math.random() * height : height + 10;
+                
+                // Varied sizes for depth
+                this.radius = Math.random() * 2 + 0.5; 
+                
+                // Opacity based on size (smaller = fainter/further away)
+                this.maxOpacity = this.radius / 3; 
+                this.opacity = Math.random() * this.maxOpacity;
+                
+                // Speed is faster for larger particles (parallax feel)
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 0.5,
+                    y: -(Math.random() * 0.5 + 0.2) // Always floating up
+                };
+
+                // Store original velocity for smooth return
+                this.baseVelocityY = this.velocity.y;
             }
 
             draw() {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                // Soft white glow
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                // Subtle shadow for glow effect
+                ctx.shadowBlur = this.radius * 2;
+                ctx.shadowColor = "white";
                 ctx.fill();
+                ctx.shadowBlur = 0; // Reset
             }
 
             update() {
-                if (mouse.x != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    let forceDirectionX = dx / distance;
-                    let forceDirectionY = dy / distance;
-                    
-                    const maxDistance = mouse.radius;
-                    let force = (maxDistance - distance) / maxDistance;
-                    let directionX = forceDirectionX * force * this.density;
-                    let directionY = forceDirectionY * force * this.density;
+                // 1. Basic Movement
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+
+                // 2. Interaction (Gentle Wind)
+                if (mouse.x) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
 
                     if (distance < mouse.radius) {
-                        this.x -= directionX;
-                        this.y -= directionY;
-                    } else {
-                        if (this.x !== this.baseX) {
-                            let dx = this.x - this.baseX;
-                            this.x -= dx / 20;
-                        }
-                        if (this.y !== this.baseY) {
-                            let dy = this.y - this.baseY;
-                            this.y -= dy / 20;
-                        }
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        
+                        // Push away gently
+                        const pushStrength = 2; // Low value for smoothness
+                        this.velocity.x -= forceDirectionX * force * pushStrength * 0.05;
+                        this.velocity.y -= forceDirectionY * force * pushStrength * 0.05;
                     }
-                } else {
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 20;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 20;
-                    }
+                }
+
+                // 3. Friction/Restoration (Return to normal speed)
+                // Slowly bring x velocity back to near 0
+                if (this.velocity.x > 0.5) this.velocity.x -= 0.02;
+                else if (this.velocity.x < -0.5) this.velocity.x += 0.02;
+                
+                // Slowly bring y velocity back to base float speed
+                if (this.velocity.y < this.baseVelocityY) this.velocity.y += 0.01;
+                
+                // 4. Twinkle Effect
+                // Randomly pulsate opacity
+                if (Math.random() > 0.95) {
+                   this.opacity += (Math.random() - 0.5) * 0.05;
+                   // Clamp opacity
+                   if (this.opacity < 0) this.opacity = 0;
+                   if (this.opacity > this.maxOpacity) this.opacity = this.maxOpacity;
+                }
+
+                // 5. Reset if out of bounds
+                if (this.y < -10 || this.x < -10 || this.x > width + 10) {
+                    this.init(false); // Respawn at bottom
                 }
             }
         }
 
         function initParticles() {
             particles = [];
-            // Adjust density based on screen size (fewer particles on mobile for performance)
-            const densityDivisor = width < 600 ? 15000 : 9000;
-            const numberOfParticles = (width * height) / densityDivisor;
-            
-            for (let i = 0; i < numberOfParticles; i++) {
+            // Calculate density: fewer on mobile
+            const particleCount = width < 600 ? 50 : 100;
+            for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
         }
 
         function animate() {
-            ctx.clearRect(0, 0, width, height);
-
-            // Draw Spotlight
-            if (mouse.x != null) {
-                // Smaller spotlight on mobile
-                const spotRadius = width < 600 ? 150 : 300;
-                const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, spotRadius);
-                gradient.addColorStop(0, 'rgba(40, 40, 60, 0.4)');
-                gradient.addColorStop(1, 'transparent');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, width, height);
-            }
-
-            for (let i = 0; i < particles.length; i++) {
-                let p = particles[i];
-                p.update();
-                p.draw();
-                
-                // Draw connections
-                for (let j = i; j < particles.length; j++) {
-                    let p2 = particles[j];
-                    let dx = p.x - p2.x;
-                    let dy = p.y - p2.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-
-                    // Shorter connection distance on mobile
-                    const connectDist = width < 600 ? 60 : 100;
-
-                    if (distance < connectDist) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance/connectDist})`; 
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                        ctx.closePath();
-                    }
-                }
-            }
             requestAnimationFrame(animate);
+            // Clear rect
+            ctx.clearRect(0, 0, width, height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
         }
 
-        // Boot
+        // --- START ---
         resize();
         animate();
-        
+
     </script>
 </body>
 </html>
+
