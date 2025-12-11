@@ -5,239 +5,301 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coming Soon</title>
     <style>
-        /* --- RESET & VARIABLES --- */
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-color: #050505; /* Slightly softer black */
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
-            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --bg: #030303;
+            --text-main: #ffffff;
+            --text-sub: #888888;
+            --accent-glow: rgba(255, 255, 255, 0.08);
+            --font-stack: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            background-color: var(--bg);
+            color: var(--text-main);
             font-family: var(--font-stack);
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
-            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px; /* Enable 3D space */
         }
 
-        /* --- BACKGROUND CANVAS --- */
-        #particle-canvas {
+        /* --- LAYER 1: FILM GRAIN TEXTURE --- */
+        .noise-overlay {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.07;
+            pointer-events: none;
+            z-index: 2;
+            animation: noise-move 0.4s infinite linear; /* TV Static effect */
+        }
+
+        @keyframes noise-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+
+        /* --- LAYER 2: CANVAS (PARTICLES) --- */
+        canvas {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0; /* Behind content */
-            pointer-events: none;
+            z-index: 0;
         }
 
-        /* --- MAIN CONTENT CONTAINER --- */
-        .content-wrapper {
+        /* --- LAYER 3: CONTENT --- */
+        .content {
             position: relative;
-            z-index: 1;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            z-index: 10;
             text-align: center;
-            /* Subtle breathing animation after load */
-            animation: gentleFloat 6s ease-in-out infinite;
+            transform-style: preserve-3d; /* Key for the tilt effect */
+            will-change: transform;
         }
 
-        /* --- TYPOGRAPHY --- */
         h1 {
-            font-size: 5rem;
+            font-size: clamp(3.5rem, 8vw, 7rem); /* Responsive sizing */
             font-weight: 800;
-            letter-spacing: -2.5px;
+            letter-spacing: -0.04em;
             line-height: 1;
-            margin-bottom: 1.5rem;
-            
-            /* Dynamic Gradient Shimmer Effect */
-            background: linear-gradient(
-                110deg, 
-                #888888 0%, 
-                #ffffff 25%, 
-                #888888 50%
-            );
-            background-size: 200% auto;
+            margin-bottom: 1rem;
+            color: transparent;
+            background: linear-gradient(180deg, #fff 0%, #aaa 100%);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: 
-                fadeUp 1.2s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards,
-                shimmerText 8s linear infinite; /* Continuous shimmer */
             
-            opacity: 0; /* Start hidden for entry animation */
+            /* The Reveal Animation */
+            opacity: 0;
+            filter: blur(20px);
+            transform: scale(0.9) translateY(30px);
+            animation: cinematicReveal 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
         p {
-            color: var(--text-secondary);
-            font-size: 1.25rem;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: var(--text-sub);
             font-weight: 400;
-            letter-spacing: 1px;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
+            
+            /* Subtitle Delay Animation */
             opacity: 0;
-            animation: fadeUp 1.2s cubic-bezier(0.215, 0.610, 0.355, 1.000) 0.3s forwards;
+            transform: translateY(20px);
+            animation: fadeUp 1s cubic-bezier(0.19, 1, 0.22, 1) 0.6s forwards;
         }
 
-        /* --- ANIMATIONS --- */
-        /* Entry animation */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-                filter: blur(10px);
-            }
+        /* --- KEYFRAMES --- */
+        @keyframes cinematicReveal {
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
                 filter: blur(0);
+                transform: scale(1) translateY(0);
             }
         }
 
-        /* Text gradient movement */
-        @keyframes shimmerText {
-            to { background-position: 200% center; }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Entire container floating gently */
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* --- MOBILE --- */
-        @media (max-width: 600px) {
-            h1 { font-size: 3.5rem; }
-            p { font-size: 1rem; }
-        }
     </style>
 </head>
 <body>
 
-    <canvas id="particle-canvas"></canvas>
+    <div class="noise-overlay"></div>
 
-    <div class="content-wrapper">
+    <canvas id="canvas"></canvas>
+
+    <div class="content" id="tilt-card">
         <h1>Coming soon!</h1>
         <p>Expect in January.</p>
     </div>
 
     <script>
-        const canvas = document.getElementById('particle-canvas');
+        /** * SETUP & CONFIG 
+         */
+        const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-
+        const content = document.getElementById('tilt-card');
+        
         let width, height;
         let particles = [];
+        
+        // Mouse state
+        const mouse = { x: null, y: null, radius: 200 };
 
-        // Configuration
-        const particleCount = 80; // Number of particles
-        const particleColor = 'rgba(255, 255, 255, 0.3)'; // Subtle white
-        const connectionDistance = 100; // Distance to draw lines between particles
-
-        // Set canvas size
-        function setSize() {
+        /**
+         * RESIZE HANDLER
+         */
+        function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
-            canvas.width = width * window.devicePixelRatio; // Handle high-DPI displays
-            canvas.height = height * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            canvas.width = width;
+            canvas.height = height;
+            initParticles();
         }
+        window.addEventListener('resize', resize);
 
-        // Particle Class
+        /**
+         * MOUSE TRACKING & PARALLAX EFFECT
+         */
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+
+            // Parallax Tilt Logic
+            // We calculate the center of the screen
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            // Calculate distance from center (-1 to 1)
+            const xOffset = (e.x - centerX) / centerX;
+            const yOffset = (e.y - centerY) / centerY;
+
+            // Apply slight rotation to the text container
+            const rotateX = yOffset * -10; // Max 10deg rotation
+            const rotateY = xOffset * 10;
+            
+            content.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // Reset text position when mouse leaves
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+            content.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        });
+
+        /**
+         * PARTICLE CLASS
+         */
         class Particle {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.size = Math.random() * 2 + 0.5; // Size between 0.5 and 2.5
-                this.speedX = Math.random() * 0.6 - 0.3; // Slow random movement X
-                this.speedY = Math.random() * 0.6 - 0.3; // Slow random movement Y
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                // Wrap around screen edges
-                if (this.x > width) this.x = 0;
-                if (this.x < 0) this.x = width;
-                if (this.y > height) this.y = 0;
-                if (this.y < 0) this.y = height;
+                this.size = Math.random() * 2 + 0.1;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.density = (Math.random() * 30) + 1; // Weight of particle
             }
 
             draw() {
-                ctx.fillStyle = particleColor;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
                 ctx.fill();
+            }
+
+            update() {
+                // Mouse Interaction Physics
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    
+                    // The closer the mouse, the stronger the push
+                    const maxDistance = mouse.radius;
+                    let force = (maxDistance - distance) / maxDistance;
+                    let directionX = forceDirectionX * force * this.density;
+                    let directionY = forceDirectionY * force * this.density;
+
+                    if (distance < mouse.radius) {
+                        // Push away from mouse
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    } else {
+                        // Return to original position slowly (elasticity)
+                        if (this.x !== this.baseX) {
+                            let dx = this.x - this.baseX;
+                            this.x -= dx / 20; // speed of return
+                        }
+                        if (this.y !== this.baseY) {
+                            let dy = this.y - this.baseY;
+                            this.y -= dy / 20;
+                        }
+                    }
+                } else {
+                     // Drift back if no mouse
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 20;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 20;
+                    }
+                }
             }
         }
 
-        // Initialize Particles
+        /**
+         * INITIALIZATION & LOOP
+         */
         function initParticles() {
             particles = [];
-            for (let i = 0; i < particleCount; i++) {
+            // Create a grid of particles or random distribution
+            const numberOfParticles = (width * height) / 9000; // Density calculation
+            for (let i = 0; i < numberOfParticles; i++) {
                 particles.push(new Particle());
             }
         }
 
-        // Animation Loop
         function animate() {
             ctx.clearRect(0, 0, width, height);
 
-            // Optional: Subtle background gradient pulse on the canvas
-            const time = Date.now() * 0.001;
-            const pulse = Math.sin(time) * 0.1 + 0.9;
-            const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
-            gradient.addColorStop(0, `rgba(30, 30, 40, ${0.3 * pulse})`);
-            gradient.addColorStop(1, 'transparent');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0,0,width,height);
+            // 1. Draw Mouse Spotlight Gradient
+            if (mouse.x != null) {
+                const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 300);
+                gradient.addColorStop(0, 'rgba(40, 40, 60, 0.4)'); // Inner light
+                gradient.addColorStop(1, 'transparent'); // Outer dark
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+            }
 
-
-            // Update and draw particles
+            // 2. Draw Particles and Lines
             for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
+                let p = particles[i];
+                p.update();
+                p.draw();
+                
+                // Draw connections (Constellation effect)
+                for (let j = i; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dx = p.x - p2.x;
+                    let dy = p.y - p2.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
 
-                // Optional: Draw faint lines between nearby particles
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < connectionDistance) {
-                        const opacity = 1 - (distance / connectionDistance);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.15})`;
-                        ctx.lineWidth = 0.5;
+                    if (distance < 100) {
                         ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
+                        // Opacity based on distance
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance/100})`; 
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
+                        ctx.closePath();
                     }
                 }
             }
             requestAnimationFrame(animate);
         }
 
-        // Events
-        window.addEventListener('resize', () => {
-            setSize();
-            initParticles(); // Re-init to avoid stretching
-        });
-
-        // Start
-        setSize();
-        initParticles();
+        // Boot
+        resize();
         animate();
-
+        
     </script>
 </body>
 </html>
