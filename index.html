@@ -2,262 +2,253 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Coming Soon</title>
-    <style>
-        /* --- RESET & VARIABLES --- */
-        :root {
-            --bg: #050505;
-            --text-main: #ffffff;
-            --text-sub: #888888;
-            --font-stack: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: var(--font-stack);
-            height: 100dvh; /* Dynamic viewport height for mobile */
-            width: 100%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overscroll-behavior: none;
-        }
-
-        /* --- BACKGROUND LAYERS --- */
-        .noise-overlay {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-            opacity: 0.4;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* --- CONTENT --- */
-        .content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            width: 100%;
-            padding: 0 20px;
-        }
-
-        h1 {
-            font-size: clamp(3rem, 12vw, 6rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            color: transparent;
-            /* Subtle shimmer gradient */
-            background: linear-gradient(120deg, #ffffff 0%, #a5a5a5 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            
-            opacity: 0;
-            transform: translateY(20px);
-            animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        p {
-            font-size: clamp(1rem, 4vw, 1.25rem);
-            color: var(--text-sub);
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            
-            opacity: 0;
-            transform: translateY(10px);
-            animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
-        }
-
-        @keyframes textReveal {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vinuga Kisath - Cybersecurity Student & Web Developer Portfolio">
+    <title>Vinuga Kisath | Cybersecurity & Web Dev</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Film Grain Texture -->
-    <div class="noise-overlay"></div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="logo">VK<span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="#about"><span class="code-num">01.</span> About</a></li>
+                <li><a href="#skills"><span class="code-num">02.</span> Skills</a></li>
+                <li><a href="#experience"><span class="code-num">03.</span> Experience</a></li>
+                <li><a href="#projects"><span class="code-num">04.</span> Work</a></li>
+                <li><a href="#contact" class="btn-small">Contact</a></li>
+            </ul>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Particle System -->
-    <canvas id="canvas"></canvas>
+    <main>
+        <section id="hero" class="hero-section hidden">
+            <p class="eyebrow">Hi, my name is</p>
+            <h1 class="big-heading">Vinuga Kisath.</h1>
+            <h2 class="sub-heading">I build secure systems & digital experiences.</h2>
+            <p class="hero-text">
+                I am a Cybersecurity Student and Web Developer based in Sri Lanka. 
+                I focus on combining clean code with robust security practices to create 
+                modern, safe, and efficient web applications.
+            </p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn-primary">Check out my work</a>
+            </div>
+        </section>
 
-    <!-- Content -->
-    <div class="content">
-        <h1>Coming soon!</h1>
-        <p>Expect in January.</p>
-    </div>
+        <section id="about" class="section hidden">
+            <h3 class="section-title"><span class="code-num">01.</span> About Me</h3>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        Hello! My name is Vinuga and I enjoy understanding how things work under the hood. 
+                        Currently, I am an <strong>Advanced Level student</strong> studying Accounting, IT, and Economics, 
+                        but my true passion lies in the intersection of software engineering and security.
+                    </p>
+                    <p>
+                        My journey started with simple HTML pages, but I quickly realized that building 
+                        software is only half the battle—securing it is the other half.
+                    </p>
+                    <p>
+                        I am dedicated to learning the intricacies of <strong>Cybersecurity</strong> while honing my 
+                        skills in full-stack web development. I love solving logic puzzles and optimizing code performance.
+                    </p>
+                </div>
+                <div class="about-img">
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/300x300/112240/64ffda?text=VK" alt="Vinuga Kisath">
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let particles = [];
-        
-        // Mouse/Touch state
-        let mouse = { x: undefined, y: undefined, radius: 150 };
+        <section id="skills" class="section hidden">
+            <h3 class="section-title"><span class="code-num">02.</span> Tech Stack</h3>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Development</h4>
+                    <div class="chips">
+                        <span>JavaScript (ES6+)</span>
+                        <span>HTML5 & CSS3</span>
+                        <span>React.js</span>
+                        <span>Node.js</span>
+                        <span>Python</span>
+                        <span>Tailwind CSS</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Security & Tools</h4>
+                    <div class="chips">
+                        <span>Git & GitHub</span>
+                        <span>Linux / Bash</span>
+                        <span>Network Analysis</span>
+                        <span>Burp Suite</span>
+                        <span>VS Code</span>
+                        <span>SQL</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        // --- RESIZE HANDLING ---
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            // Set canvas resolution to match pixel density for crisp rendering
-            const dpr = window.devicePixelRatio || 1;
-            canvas.width = width * dpr;
-            canvas.height = height * dpr;
-            ctx.scale(dpr, dpr);
+        <section id="experience" class="section hidden">
+            <h3 class="section-title"><span class="code-num">03.</span> Where I've Learned</h3>
+            <div class="timeline">
+                
+                <div class="timeline-item">
+                    <div class="timeline-left">
+                        <span class="date">2023 - Present</span>
+                    </div>
+                    <div class="timeline-right">
+                        <h4>Freelance Web Developer</h4>
+                        <span class="company">Self-Employed</span>
+                        <p>Developing custom websites for local businesses and optimizing frontend performance. Implementing basic security headers and secure form handling.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-left">
+                        <span class="date">2022 - 2023</span>
+                    </div>
+                    <div class="timeline-right">
+                        <h4>IT Club President</h4>
+                        <span class="company">High School</span>
+                        <p>Led a team of students in organizing tech workshops. Taught basics of Python and safe internet practices to junior students.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-left">
+                        <span class="date">2021 - 2022</span>
+                    </div>
+                    <div class="timeline-right">
+                        <h4>Student Developer</h4>
+                        <span class="company">Personal Projects</span>
+                        <p>Started journey into coding. Built first static sites and CLI tools. Completed various online certifications in web fundamentals.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="projects" class="section hidden">
+            <h3 class="section-title"><span class="code-num">04.</span> Some Things I've Built</h3>
+            <div class="projects-grid">
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <i class="fa-regular fa-folder open-folder"></i>
+                        <div class="project-links">
+                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    </div>
+                    <h4 class="project-title">VulnScanner</h4>
+                    <p class="project-desc">A Python-based CLI tool that scans local networks for open ports and basic vulnerabilities using Nmap scripts.</p>
+                    <ul class="project-tech">
+                        <li>Python</li>
+                        <li>Nmap</li>
+                        <li>Shell</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <i class="fa-regular fa-folder open-folder"></i>
+                        <div class="project-links">
+                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    </div>
+                    <h4 class="project-title">SmartHome Dash</h4>
+                    <p class="project-desc">IoT Dashboard interface designed to visualize temperature and energy usage data in real-time.</p>
+                    <ul class="project-tech">
+                        <li>React</li>
+                        <li>Chart.js</li>
+                        <li>Firebase</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <i class="fa-regular fa-folder open-folder"></i>
+                        <div class="project-links">
+                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    </div>
+                    <h4 class="project-title">Portfolio V1</h4>
+                    <p class="project-desc">My first personal website built to learn CSS Grid and flexbox mastery without frameworks.</p>
+                    <ul class="project-tech">
+                        <li>HTML5</li>
+                        <li>SASS</li>
+                        <li>JS</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <i class="fa-regular fa-folder open-folder"></i>
+                        <div class="project-links">
+                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    </div>
+                    <h4 class="project-title">Minimal Notes</h4>
+                    <p class="project-desc">A distraction-free markdown note-taking app with local storage persistence and dark mode.</p>
+                    <ul class="project-tech">
+                        <li>Vue.js</li>
+                        <li>CSS Modules</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact" class="section contact-section hidden">
+            <p class="eyebrow code-num">05. What's Next?</p>
+            <h2 class="big-heading centered">Get In Touch</h2>
+            <p class="contact-desc">
+                I’m currently looking for new opportunities and internships. 
+                Whether you have a question or just want to say hi, I’ll try my best to get back to you!
+            </p>
             
-            initParticles();
-        }
+            <form id="contact-form">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Name" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+                <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn-primary">Send Message</button>
+            </form>
+        </section>
 
-        // --- INTERACTION HANDLING ---
-        function updateMouse(x, y) {
-            mouse.x = x;
-            mouse.y = y;
-        }
+    </main>
 
-        window.addEventListener('mousemove', e => updateMouse(e.clientX, e.clientY));
-        window.addEventListener('touchmove', e => {
-            // Prevent scrolling on mobile when interacting
-            e.preventDefault(); 
-            updateMouse(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: false });
-        
-        window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
-        window.addEventListener('touchend', () => { mouse.x = undefined; mouse.y = undefined; });
-        window.addEventListener('resize', resize);
+    <footer>
+        <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-github"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+        <p class="copyright">
+            Designed & Built by Vinuga Kisath.<br>
+            <span class="small-text">Inspired by Vercel Aesthetics</span>
+        </p>
+    </footer>
 
-        // --- PARTICLE LOGIC ---
-        class Particle {
-            constructor() {
-                this.init(true);
-            }
-
-            init(randomY = false) {
-                this.x = Math.random() * width;
-                // If randomY is true, place anywhere (start). If false, place at bottom (respawn)
-                this.y = randomY ? Math.random() * height : height + 10;
-                
-                // Varied sizes for depth
-                this.radius = Math.random() * 2 + 0.5; 
-                
-                // Opacity based on size (smaller = fainter/further away)
-                this.maxOpacity = this.radius / 3; 
-                this.opacity = Math.random() * this.maxOpacity;
-                
-                // Speed is faster for larger particles (parallax feel)
-                this.velocity = {
-                    x: (Math.random() - 0.5) * 0.5,
-                    y: -(Math.random() * 0.5 + 0.2) // Always floating up
-                };
-
-                // Store original velocity for smooth return
-                this.baseVelocityY = this.velocity.y;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-                // Soft white glow
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                // Subtle shadow for glow effect
-                ctx.shadowBlur = this.radius * 2;
-                ctx.shadowColor = "white";
-                ctx.fill();
-                ctx.shadowBlur = 0; // Reset
-            }
-
-            update() {
-                // 1. Basic Movement
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
-
-                // 2. Interaction (Gentle Wind)
-                if (mouse.x) {
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < mouse.radius) {
-                        const forceDirectionX = dx / distance;
-                        const forceDirectionY = dy / distance;
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        
-                        // Push away gently
-                        const pushStrength = 2; // Low value for smoothness
-                        this.velocity.x -= forceDirectionX * force * pushStrength * 0.05;
-                        this.velocity.y -= forceDirectionY * force * pushStrength * 0.05;
-                    }
-                }
-
-                // 3. Friction/Restoration (Return to normal speed)
-                // Slowly bring x velocity back to near 0
-                if (this.velocity.x > 0.5) this.velocity.x -= 0.02;
-                else if (this.velocity.x < -0.5) this.velocity.x += 0.02;
-                
-                // Slowly bring y velocity back to base float speed
-                if (this.velocity.y < this.baseVelocityY) this.velocity.y += 0.01;
-                
-                // 4. Twinkle Effect
-                // Randomly pulsate opacity
-                if (Math.random() > 0.95) {
-                   this.opacity += (Math.random() - 0.5) * 0.05;
-                   // Clamp opacity
-                   if (this.opacity < 0) this.opacity = 0;
-                   if (this.opacity > this.maxOpacity) this.opacity = this.maxOpacity;
-                }
-
-                // 5. Reset if out of bounds
-                if (this.y < -10 || this.x < -10 || this.x > width + 10) {
-                    this.init(false); // Respawn at bottom
-                }
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            // Calculate density: fewer on mobile
-            const particleCount = width < 600 ? 50 : 100;
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            // Clear rect
-            ctx.clearRect(0, 0, width, height);
-            
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-        }
-
-        // --- START ---
-        resize();
-        animate();
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
-
