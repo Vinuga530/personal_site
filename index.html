@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Vinuga Kisath - Cybersecurity Student & Web Developer Portfolio">
     <title>Vinuga Kisath | Cybersecurity & Web Dev</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+    <canvas id="canvas-bg"></canvas>
 
     <nav class="navbar">
         <div class="nav-container">
@@ -26,31 +26,32 @@
                 <li><a href="#contact" class="btn-small">Contact</a></li>
             </ul>
             <div class="menu-toggle" id="mobile-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
     </nav>
 
     <main>
         <section id="hero" class="hero-section hidden">
-            <p class="eyebrow">Hi, my name is</p>
-            <h1 class="big-heading">Vinuga Kisath.</h1>
-            <h2 class="sub-heading">I build secure systems & digital experiences.</h2>
-            <p class="hero-text">
-                I am a Cybersecurity Student and Web Developer based in Sri Lanka. 
-                I focus on combining clean code with robust security practices to create 
-                modern, safe, and efficient web applications.
-            </p>
-            <div class="hero-cta">
-                <a href="#projects" class="btn-primary">Check out my work</a>
+            <div class="hero-content">
+                <p class="eyebrow">Hi, my name is</p>
+                <h1 class="big-heading">Vinuga Kisath.</h1>
+                <h2 class="sub-heading">I build secure systems & digital experiences.</h2>
+                <p class="hero-text">
+                    I am a Cybersecurity Student and Web Developer based in Sri Lanka. 
+                    I focus on combining clean code with robust security practices to create 
+                    modern, safe, and efficient web applications.
+                </p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn-primary">Check out my work</a>
+                    <a href="#contact" class="btn-secondary">Contact Me</a>
+                </div>
             </div>
         </section>
 
         <section id="about" class="section hidden">
             <h3 class="section-title"><span class="code-num">01.</span> About Me</h3>
-            <div class="about-content">
+            <div class="about-grid">
                 <div class="about-text">
                     <p>
                         Hello! My name is Vinuga and I enjoy understanding how things work under the hood. 
@@ -63,12 +64,12 @@
                     </p>
                     <p>
                         I am dedicated to learning the intricacies of <strong>Cybersecurity</strong> while honing my 
-                        skills in full-stack web development. I love solving logic puzzles and optimizing code performance.
+                        skills in full-stack web development.
                     </p>
                 </div>
                 <div class="about-img">
                     <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/300x300/112240/64ffda?text=VK" alt="Vinuga Kisath">
+                        <img src="https://via.placeholder.com/400x400/112240/64ffda?text=VK" alt="Vinuga Kisath">
                     </div>
                 </div>
             </div>
@@ -76,9 +77,9 @@
 
         <section id="skills" class="section hidden">
             <h3 class="section-title"><span class="code-num">02.</span> Tech Stack</h3>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h4>Development</h4>
+            <div class="skills-wrapper">
+                <div class="skill-card">
+                    <h4><i class="fa-solid fa-code"></i> Development</h4>
                     <div class="chips">
                         <span>JavaScript (ES6+)</span>
                         <span>HTML5 & CSS3</span>
@@ -88,8 +89,8 @@
                         <span>Tailwind CSS</span>
                     </div>
                 </div>
-                <div class="skill-category">
-                    <h4>Security & Tools</h4>
+                <div class="skill-card">
+                    <h4><i class="fa-solid fa-shield-halved"></i> Security & Tools</h4>
                     <div class="chips">
                         <span>Git & GitHub</span>
                         <span>Linux / Bash</span>
@@ -107,10 +108,8 @@
             <div class="timeline">
                 
                 <div class="timeline-item">
-                    <div class="timeline-left">
-                        <span class="date">2023 - Present</span>
-                    </div>
-                    <div class="timeline-right">
+                    <span class="date">2023 - Present</span>
+                    <div class="timeline-content">
                         <h4>Freelance Web Developer</h4>
                         <span class="company">Self-Employed</span>
                         <p>Developing custom websites for local businesses and optimizing frontend performance. Implementing basic security headers and secure form handling.</p>
@@ -118,10 +117,8 @@
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-left">
-                        <span class="date">2022 - 2023</span>
-                    </div>
-                    <div class="timeline-right">
+                    <span class="date">2022 - 2023</span>
+                    <div class="timeline-content">
                         <h4>IT Club President</h4>
                         <span class="company">High School</span>
                         <p>Led a team of students in organizing tech workshops. Taught basics of Python and safe internet practices to junior students.</p>
@@ -129,10 +126,8 @@
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-left">
-                        <span class="date">2021 - 2022</span>
-                    </div>
-                    <div class="timeline-right">
+                    <span class="date">2021 - 2022</span>
+                    <div class="timeline-content">
                         <h4>Student Developer</h4>
                         <span class="company">Personal Projects</span>
                         <p>Started journey into coding. Built first static sites and CLI tools. Completed various online certifications in web fundamentals.</p>
@@ -147,11 +142,11 @@
             <div class="projects-grid">
                 
                 <div class="project-card">
-                    <div class="project-header">
-                        <i class="fa-regular fa-folder open-folder"></i>
+                    <div class="project-top">
+                        <i class="fa-regular fa-folder-open folder-icon"></i>
                         <div class="project-links">
-                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
-                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
                     <h4 class="project-title">VulnScanner</h4>
@@ -164,11 +159,11 @@
                 </div>
 
                 <div class="project-card">
-                    <div class="project-header">
-                        <i class="fa-regular fa-folder open-folder"></i>
+                    <div class="project-top">
+                        <i class="fa-regular fa-folder-open folder-icon"></i>
                         <div class="project-links">
-                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
-                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
                     <h4 class="project-title">SmartHome Dash</h4>
@@ -181,11 +176,11 @@
                 </div>
 
                 <div class="project-card">
-                    <div class="project-header">
-                        <i class="fa-regular fa-folder open-folder"></i>
+                    <div class="project-top">
+                        <i class="fa-regular fa-folder-open folder-icon"></i>
                         <div class="project-links">
-                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
-                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
                     <h4 class="project-title">Portfolio V1</h4>
@@ -198,11 +193,11 @@
                 </div>
 
                 <div class="project-card">
-                    <div class="project-header">
-                        <i class="fa-regular fa-folder open-folder"></i>
+                    <div class="project-top">
+                        <i class="fa-regular fa-folder-open folder-icon"></i>
                         <div class="project-links">
-                            <a href="#" aria-label="GitHub Link"><i class="fa-brands fa-github"></i></a>
-                            <a href="#" aria-label="External Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
                     <h4 class="project-title">Minimal Notes</h4>
@@ -223,15 +218,7 @@
                 I’m currently looking for new opportunities and internships. 
                 Whether you have a question or just want to say hi, I’ll try my best to get back to you!
             </p>
-            
-            <form id="contact-form">
-                <div class="form-group">
-                    <input type="text" id="name" placeholder="Name" required>
-                    <input type="email" id="email" placeholder="Email" required>
-                </div>
-                <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
-                <button type="submit" class="btn-primary">Send Message</button>
-            </form>
+            <a href="mailto:email@example.com" class="btn-primary">Say Hello</a>
         </section>
 
     </main>
@@ -240,12 +227,10 @@
         <div class="social-icons">
             <a href="#"><i class="fa-brands fa-github"></i></a>
             <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-twitter"></i></a>
             <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
         <p class="copyright">
             Designed & Built by Vinuga Kisath.<br>
-            <span class="small-text">Inspired by Vercel Aesthetics</span>
         </p>
     </footer>
 
