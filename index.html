@@ -3,236 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vinuga Kisath | Cybersecurity & Web Dev</title>
+    <meta name="description" content="Vinuga Kisath | Cybersecurity Portfolio">
+    <title>Vinuga Kisath // CYBERSEC</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <canvas id="canvas-bg"></canvas>
+    <canvas id="cyber-canvas"></canvas>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#hero" class="logo">VK<span class="dot">.</span></a>
-            <ul class="nav-links">
-                <li><a href="#about"><span class="code-num">01.</span> About</a></li>
-                <li><a href="#skills"><span class="code-num">02.</span> Skills</a></li>
-                <li><a href="#experience"><span class="code-num">03.</span> Experience</a></li>
-                <li><a href="#projects"><span class="code-num">04.</span> Work</a></li>
-                <li><a href="#contact" class="btn-small">Contact</a></li>
-            </ul>
-            <div class="menu-toggle" id="mobile-menu">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-        </div>
-    </nav>
+    <div class="layout-wrapper">
+        
+        <header class="navbar">
+            <div class="logo">VK<span class="accent">_</span>SEC</div>
+            <nav class="desktop-nav">
+                <a href="#about" class="nav-link">/ABOUT</a>
+                <a href="#skills" class="nav-link">/STACK</a>
+                <a href="#projects" class="nav-link">/PROJECTS</a>
+                <a href="#contact" class="nav-link">/CONTACT</a>
+            </nav>
+        </header>
 
-    <main>
-        <section id="hero" class="hero-section hidden">
-            <div class="hero-content">
-                <p class="eyebrow">Hi, my name is</p>
-                <h1 class="big-heading">Vinuga Kisath.</h1>
-                <h2 class="sub-heading">I build secure systems & digital experiences.</h2>
-                <p class="hero-text">
-                    I am a Cybersecurity Student and Web Developer based in Sri Lanka. 
-                    I focus on combining clean code with robust security practices to create 
-                    modern, safe, and efficient web applications.
-                </p>
-                <div class="hero-cta">
-                    <a href="#projects" class="btn-primary">Check out my work</a>
-                    <a href="#contact" class="btn-secondary">Contact Me</a>
+        <main>
+            <section id="hero" class="hero-section">
+                <div class="glitch-container">
+                    <p class="terminal-text">> INITIALIZING SYSTEM...</p>
+                    <h1 class="hero-title">VINUGA<br>KISATH</h1>
+                    <h2 class="hero-subtitle">CYBERSECURITY <span class="accent">&</span><br>WEB ARCHITECTURE</h2>
                 </div>
-            </div>
-        </section>
-
-        <section id="about" class="section hidden">
-            <h3 class="section-title"><span class="code-num">01.</span> About Me</h3>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>
-                        Hello! My name is Vinuga and I enjoy understanding how things work under the hood. 
-                        Currently, I am an <strong>Advanced Level student</strong> studying Accounting, IT, and Economics, 
-                        but my true passion lies in the intersection of software engineering and security.
-                    </p>
-                    <p>
-                        My journey started with simple HTML pages, but I quickly realized that building 
-                        software is only half the battle—securing it is the other half.
-                    </p>
-                    <p>
-                        I am dedicated to learning the intricacies of <strong>Cybersecurity</strong> while honing my 
-                        skills in full-stack web development.
-                    </p>
-                </div>
-                <div class="about-img">
-                    <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/400x400/112240/64ffda?text=VK" alt="Vinuga Kisath">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="section hidden">
-            <h3 class="section-title"><span class="code-num">02.</span> Tech Stack</h3>
-            <div class="skills-wrapper">
-                <div class="skill-card">
-                    <h4><i class="fa-solid fa-code"></i> Development</h4>
-                    <div class="chips">
-                        <span>JavaScript (ES6+)</span>
-                        <span>HTML5 & CSS3</span>
-                        <span>React.js</span>
-                        <span>Node.js</span>
-                        <span>Python</span>
-                        <span>Tailwind CSS</span>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <h4><i class="fa-solid fa-shield-halved"></i> Security & Tools</h4>
-                    <div class="chips">
-                        <span>Git & GitHub</span>
-                        <span>Linux / Bash</span>
-                        <span>Network Analysis</span>
-                        <span>Burp Suite</span>
-                        <span>VS Code</span>
-                        <span>SQL</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="experience" class="section hidden">
-            <h3 class="section-title"><span class="code-num">03.</span> Where I've Learned</h3>
-            <div class="timeline">
                 
-                <div class="timeline-item">
-                    <span class="date">2023 - Present</span>
-                    <div class="timeline-content">
-                        <h4>Freelance Web Developer</h4>
-                        <span class="company">Self-Employed</span>
-                        <p>Developing custom websites for local businesses and optimizing frontend performance. Implementing basic security headers and secure form handling.</p>
+                <div class="scroll-indicator">
+                    <span>SCROLL_DOWN</span>
+                    <div class="line"></div>
+                </div>
+            </section>
+
+            <section id="about" class="section-block">
+                <div class="section-header">
+                    <span class="section-num">01</span>
+                    <h3 class="section-label">PROFILE_DATA</h3>
+                </div>
+                <div class="content-grid">
+                    <div class="text-block">
+                        <p class="lead">
+                            I am an A/L Student specializing in the intersection of 
+                            <span class="highlight">Financial Systems</span> and <span class="highlight">Digital Security</span>.
+                        </p>
+                        <p>
+                            My objective is to build web infrastructures that are not only performant 
+                            but inherently secure. I move beyond "making it work" to "making it unbreakable."
+                        </p>
+                    </div>
+                    <div class="stat-block">
+                        <div class="stat-item">
+                            <span class="stat-val">3+</span>
+                            <span class="stat-lbl">YEARS CODING</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-val">100%</span>
+                            <span class="stat-lbl">SECURE CODE</span>
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="timeline-item">
-                    <span class="date">2022 - 2023</span>
-                    <div class="timeline-content">
-                        <h4>IT Club President</h4>
-                        <span class="company">High School</span>
-                        <p>Led a team of students in organizing tech workshops. Taught basics of Python and safe internet practices to junior students.</p>
+            <section id="skills" class="section-block">
+                <div class="section-header">
+                    <span class="section-num">02</span>
+                    <h3 class="section-label">TECH_ARSENAL</h3>
+                </div>
+                <div class="skill-grid">
+                    <div class="tech-card">
+                        <h4>// CORE</h4>
+                        <div class="tech-list">
+                            <span>Python</span>
+                            <span>JavaScript (ES6)</span>
+                            <span>Node.js</span>
+                            <span>C++</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <h4>// WEB</h4>
+                        <div class="tech-list">
+                            <span>React</span>
+                            <span>HTML5/CSS3</span>
+                            <span>Tailwind</span>
+                            <span>API Design</span>
+                        </div>
+                    </div>
+                    <div class="tech-card active-border">
+                        <h4>// SECURITY</h4>
+                        <div class="tech-list">
+                            <span class="accent-text">Burp Suite</span>
+                            <span>Wireshark</span>
+                            <span>Bash Scripting</span>
+                            <span>Kali Linux</span>
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="timeline-item">
-                    <span class="date">2021 - 2022</span>
-                    <div class="timeline-content">
-                        <h4>Student Developer</h4>
-                        <span class="company">Personal Projects</span>
-                        <p>Started journey into coding. Built first static sites and CLI tools. Completed various online certifications in web fundamentals.</p>
+            <section id="experience" class="section-block">
+                <div class="section-header">
+                    <span class="section-num">03</span>
+                    <h3 class="section-label">LOGS</h3>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-row">
+                        <div class="time-col">2023 — NOW</div>
+                        <div class="desc-col">
+                            <h4>Freelance Developer</h4>
+                            <p>Full-stack development & security auditing for local SMEs.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="time-col">2022 — 2023</div>
+                        <div class="desc-col">
+                            <h4>IT Club President</h4>
+                            <p>Led workshops on digital hygiene and intro to programming.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="time-col">2021</div>
+                        <div class="desc-col">
+                            <h4>Initialization</h4>
+                            <p>Started self-taught journey in Python and Networking.</p>
+                        </div>
                     </div>
                 </div>
+            </section>
 
+            <section id="projects" class="section-block">
+                <div class="section-header">
+                    <span class="section-num">04</span>
+                    <h3 class="section-label">EXECUTABLES</h3>
+                </div>
+                <div class="project-list">
+                    
+                    <a href="#" class="project-row">
+                        <div class="proj-meta">
+                            <span class="proj-type">CLI TOOL</span>
+                            <span class="proj-date">// 2024</span>
+                        </div>
+                        <div class="proj-info">
+                            <h3>VulnScanner_v1</h3>
+                            <p>Network vulnerability scanner using Python & Nmap scripts.</p>
+                        </div>
+                        <div class="proj-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="#" class="project-row">
+                        <div class="proj-meta">
+                            <span class="proj-type">IOT DASH</span>
+                            <span class="proj-date">// 2023</span>
+                        </div>
+                        <div class="proj-info">
+                            <h3>SmartHome Hub</h3>
+                            <p>Real-time energy visualization with React & Firebase.</p>
+                        </div>
+                        <div class="proj-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="#" class="project-row">
+                        <div class="proj-meta">
+                            <span class="proj-type">WEB APP</span>
+                            <span class="proj-date">// 2023</span>
+                        </div>
+                        <div class="proj-info">
+                            <h3>Minimal Notes</h3>
+                            <p>Encrypted local-storage Markdown editor.</p>
+                        </div>
+                        <div class="proj-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                </div>
+            </section>
+
+            <section id="contact" class="section-block contact-block">
+                <div class="section-header">
+                    <span class="section-num">05</span>
+                    <h3 class="section-label">UPLINK</h3>
+                </div>
+                <div class="contact-wrapper">
+                    <h2 class="contact-head">READY TO COLLABORATE?</h2>
+                    <p>Open for internships and security-focused development roles.</p>
+                    <a href="mailto:contact@vinuga.dev" class="btn-main">INITIATE_CONTACT()</a>
+                    
+                    <div class="social-links">
+                        <a href="#">GITHUB</a>
+                        <a href="#">LINKEDIN</a>
+                        <a href="#">TWITTER</a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <span>VINUGA KISATH © 2025</span>
+                <span>SYSTEM STATUS: ONLINE</span>
             </div>
-        </section>
-
-        <section id="projects" class="section hidden">
-            <h3 class="section-title"><span class="code-num">04.</span> Some Things I've Built</h3>
-            <div class="projects-grid">
-                
-                <div class="project-card">
-                    <div class="project-top">
-                        <i class="fa-regular fa-folder-open folder-icon"></i>
-                        <div class="project-links">
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
-                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        </div>
-                    </div>
-                    <h4 class="project-title">VulnScanner</h4>
-                    <p class="project-desc">A Python-based CLI tool that scans local networks for open ports and basic vulnerabilities using Nmap scripts.</p>
-                    <ul class="project-tech">
-                        <li>Python</li>
-                        <li>Nmap</li>
-                        <li>Shell</li>
-                    </ul>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-top">
-                        <i class="fa-regular fa-folder-open folder-icon"></i>
-                        <div class="project-links">
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
-                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        </div>
-                    </div>
-                    <h4 class="project-title">SmartHome Dash</h4>
-                    <p class="project-desc">IoT Dashboard interface designed to visualize temperature and energy usage data in real-time.</p>
-                    <ul class="project-tech">
-                        <li>React</li>
-                        <li>Chart.js</li>
-                        <li>Firebase</li>
-                    </ul>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-top">
-                        <i class="fa-regular fa-folder-open folder-icon"></i>
-                        <div class="project-links">
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
-                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        </div>
-                    </div>
-                    <h4 class="project-title">Portfolio V1</h4>
-                    <p class="project-desc">My first personal website built to learn CSS Grid and flexbox mastery without frameworks.</p>
-                    <ul class="project-tech">
-                        <li>HTML5</li>
-                        <li>SASS</li>
-                        <li>JS</li>
-                    </ul>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-top">
-                        <i class="fa-regular fa-folder-open folder-icon"></i>
-                        <div class="project-links">
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
-                            <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        </div>
-                    </div>
-                    <h4 class="project-title">Minimal Notes</h4>
-                    <p class="project-desc">A distraction-free markdown note-taking app with local storage persistence and dark mode.</p>
-                    <ul class="project-tech">
-                        <li>Vue.js</li>
-                        <li>CSS Modules</li>
-                    </ul>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="contact" class="section contact-section hidden">
-            <p class="eyebrow code-num">05. What's Next?</p>
-            <h2 class="big-heading centered">Get In Touch</h2>
-            <p class="contact-desc">
-                I’m currently looking for new opportunities and internships. 
-                Whether you have a question or just want to say hi, I’ll try my best to get back to you!
-            </p>
-            <a href="mailto:email@example.com" class="btn-primary">Say Hello</a>
-        </section>
-
-    </main>
-
-    <footer>
-        <div class="social-icons">
-            <a href="#"><i class="fa-brands fa-github"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-        </div>
-        <p class="copyright">
-            Designed & Built by Vinuga Kisath.<br>
-        </p>
-    </footer>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
