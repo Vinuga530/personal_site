@@ -1,74 +1,109 @@
 /* script.js */
 
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. Particle Network Animation (Minimal) ---
-    const canvas = document.getElementById('canvas-bg');
-    const ctx = canvas.getContext('2d');
-    
-    let particlesArray;
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+const canvas = document.getElementById('cyber-canvas');
+const ctx = canvas.getContext('2d');
 
-    // Set canvas size
-    canvas.width = width;
-    canvas.height = height;
+let particlesArray;
 
-    class Particle {
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.directionX = (Math.random() * 0.4) - 0.2; // Slow movement
-            this.directionY = (Math.random() * 0.4) - 0.2;
-            this.size = Math.random() * 2 + 1;
-            this.color = '#64ffda';
-        }
+// Resize canvas to fill screen
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-        update() {
-            if (this.x > width || this.x < 0) this.directionX = -this.directionX;
-            if (this.y > height || this.y < 0) this.directionY = -this.directionY;
-            this.x += this.directionX;
-            this.y += this.directionY;
-        }
+let mouse = {
+    x: null,
+    y: null,
+    radius: 150 // Radius of interaction
+}
 
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-            ctx.fillStyle = this.color;
-            ctx.globalAlpha = 0.3; // Very subtle dots
-            ctx.fill();
-        }
+// Track mouse position
+window.addEventListener('mousemove', function(event) {
+    mouse.x = event.x;
+    mouse.y = event.y;
+});
+
+// Particle Class
+class Particle {
+    constructor(x, y, directionX, directionY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.size = size;
+        this.color = color;
     }
 
-    function init() {
-        particlesArray = [];
-        let numberOfParticles = (width * height) / 15000; // Density
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
+    // Draw individual particle
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = '#1a1a1a'; // Very dark gray dots (subtle)
+        ctx.fill();
     }
 
-    function animate() {
-        requestAnimationFrame(animate);
-        ctx.clearRect(0, 0, width, height);
-
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
+    // Update particle position & check mouse interaction
+    update() {
+        // Wall collision detection
+        if (this.x > canvas.width || this.x < 0) {
+            this.directionX = -this.directionX;
         }
-        connect();
-    }
+        if (this.y > canvas.height || this.y < 0) {
+            this.directionY = -this.directionY;
+        }
 
-    function connect() {
-        let opacityValue = 1;
-        for (let a = 0; a < particlesArray.length; a++) {
-            for (let b = a; b < particlesArray.length; b++) {
-                let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + 
-                               ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                
-                if (distance < (width/7) * (height/7)) {
-                    opacityValue = 1 - (distance / 20000);
-                    ctx.strokeStyle = 'rgba(100, 255, 218,' + opacityValue * 0.15 + ')'; // Very faint lines
+        // Mouse Interaction (Collision)
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx*dx + dy*dy);
+
+        // If mouse is close, gently push particle away to clear text space?
+        // Or pull it in? Let's do a gentle pull for "Network" feel.
+        // But keep it subtle.
+        
+        // Move particle
+        this.x += this.directionX;
+        this.y += this.directionY;
+
+        // Draw particle
+        this.draw();
+    }
+}
+
+// Create particle array
+function init() {
+    particlesArray = [];
+    // Calculate number of particles based on screen size (Density)
+    let numberOfParticles = (canvas.height * canvas.width) / 12000;
+
+    for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 1;
+        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+        
+        // Speed
+        let directionX = (Math.random() * 0.4) - 0.2;
+        let directionY = (Math.random() * 0.4) - 0.2;
+        
+        let color = '#333';
+
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+    }
+}
+
+// Connect particles with lines if they are close OR close to mouse
+function connect() {
+    let opacityValue = 1;
+    for (let a = 0; a < particlesArray.length; a++) {
+        
+        // 1. Connect particle to particle (if very close)
+        for (let b = a; b < particlesArray.length; b++) {
+            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                         + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+            
+            if (distance < (canvas.width/7) * (canvas.height/7)) {
+                // Determine opacity based on distance
+                opacityValue = 1 - (distance / 20000);
+                if(opacityValue > 0) {
+                    ctx.strokeStyle = 'rgba(30, 30, 30,' + opacityValue + ')'; // Dark static lines
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
@@ -77,58 +112,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+
+        // 2. Connect particle to MOUSE (The Interactive Part)
+        let mouseDistance = ((particlesArray[a].x - mouse.x) * (particlesArray[a].x - mouse.x))
+                          + ((particlesArray[a].y - mouse.y) * (particlesArray[a].y - mouse.y));
+
+        if (mouseDistance < 25000) { // Interaction radius
+             ctx.strokeStyle = 'rgba(0, 243, 255, 0.2)'; // CYAN accent when near mouse
+             ctx.lineWidth = 1;
+             ctx.beginPath();
+             ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+             ctx.lineTo(mouse.x, mouse.y);
+             ctx.stroke();
+        }
     }
+}
 
-    // Resize Event
-    window.addEventListener('resize', () => {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-        init();
-    });
+// Animation Loop
+function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
 
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+    }
+    connect();
+}
+
+// Handle Resize
+window.addEventListener('resize', function() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    mouse.radius = ((canvas.height/80) * (canvas.height/80));
     init();
-    animate();
+});
 
+// Run
+init();
+animate();
 
-    // --- 2. Scroll Reveal Animation ---
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.hidden').forEach(section => {
-        observer.observe(section);
-    });
-
-    // --- 3. Mobile Menu Logic ---
-    const menuBtn = document.getElementById('mobile-menu');
-    const navLinks = document.querySelector('.nav-links');
-
-    if (menuBtn) {
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            
-            // Basic mobile styling injection if active
-            if (navLinks.classList.contains('active')) {
-                Object.assign(navLinks.style, {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    position: 'absolute',
-                    top: '90px',
-                    right: '0',
-                    width: '100%',
-                    background: '#112240',
-                    padding: '20px',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
-                });
-            } else {
-                navLinks.style.display = 'none';
-            }
-        });
-    }
+// Remove mouse position when mouse leaves window
+window.addEventListener('mouseout', function() {
+    mouse.x = undefined;
+    mouse.y = undefined;
 });
