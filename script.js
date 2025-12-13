@@ -1,158 +1,153 @@
 /* script.js */
 
-const canvas = document.getElementById('cyber-canvas');
-const ctx = canvas.getContext('2d');
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- 1. Blur Reveal Animation ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1 // Trigger when 10% is visible
+    };
 
-let particlesArray;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
 
-// Resize canvas to fill screen
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(el => observer.observe(el));
 
-let mouse = {
-    x: null,
-    y: null,
-    radius: 150 // Radius of interaction
-}
 
-// Track mouse position
-window.addEventListener('mousemove', function(event) {
-    mouse.x = event.x;
-    mouse.y = event.y;
-});
+    // --- 2. Minimal Particle Network ---
+    const canvas = document.getElementById('canvas-bg');
+    const ctx = canvas.getContext('2d');
+    
+    let w, h;
+    let particles = [];
+    
+    // Config
+    const particleCount = 60; // Low count for minimalism
+    const connectionDist = 150;
+    const mouseDist = 200;
 
-// Particle Class
-class Particle {
-    constructor(x, y, directionX, directionY, size, color) {
-        this.x = x;
-        this.y = y;
-        this.directionX = directionX;
-        this.directionY = directionY;
-        this.size = size;
-        this.color = color;
+    const mouse = { x: null, y: null };
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    window.addEventListener('resize', resize);
+
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
     }
 
-    // Draw individual particle
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = '#1a1a1a'; // Very dark gray dots (subtle)
-        ctx.fill();
-    }
-
-    // Update particle position & check mouse interaction
-    update() {
-        // Wall collision detection
-        if (this.x > canvas.width || this.x < 0) {
-            this.directionX = -this.directionX;
+    class Particle {
+        constructor() {
+            this.x = Math.random() * w;
+            this.y = Math.random() * h;
+            this.vx = (Math.random() - 0.5) * 0.5; // Very slow velocity
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.size = Math.random() * 1.5;
         }
-        if (this.y > canvas.height || this.y < 0) {
-            this.directionY = -this.directionY;
-        }
 
-        // Mouse Interaction (Collision)
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx*dx + dy*dy);
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
 
-        // If mouse is close, gently push particle away to clear text space?
-        // Or pull it in? Let's do a gentle pull for "Network" feel.
-        // But keep it subtle.
-        
-        // Move particle
-        this.x += this.directionX;
-        this.y += this.directionY;
+            // Bounce off edges
+            if (this.x < 0 || this.x > w) this.vx *= -1;
+            if (this.y < 0 || this.y > h) this.vy *= -1;
 
-        // Draw particle
-        this.draw();
-    }
-}
+            // Mouse Interaction (Gentle Repel/Attract mix)
+            if (mouse.x != null) {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
 
-// Create particle array
-function init() {
-    particlesArray = [];
-    // Calculate number of particles based on screen size (Density)
-    let numberOfParticles = (canvas.height * canvas.width) / 12000;
-
-    for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 2) + 1;
-        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-        
-        // Speed
-        let directionX = (Math.random() * 0.4) - 0.2;
-        let directionY = (Math.random() * 0.4) - 0.2;
-        
-        let color = '#333';
-
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-    }
-}
-
-// Connect particles with lines if they are close OR close to mouse
-function connect() {
-    let opacityValue = 1;
-    for (let a = 0; a < particlesArray.length; a++) {
-        
-        // 1. Connect particle to particle (if very close)
-        for (let b = a; b < particlesArray.length; b++) {
-            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                         + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-            
-            if (distance < (canvas.width/7) * (canvas.height/7)) {
-                // Determine opacity based on distance
-                opacityValue = 1 - (distance / 20000);
-                if(opacityValue > 0) {
-                    ctx.strokeStyle = 'rgba(30, 30, 30,' + opacityValue + ')'; // Dark static lines
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                    ctx.stroke();
+                if (distance < mouseDist) {
+                    // Subtle attraction to create "organic" feel
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const force = (mouseDist - distance) / mouseDist;
+                    
+                    // Pull closer very gently
+                    const directionMultiplier = 0.03; 
+                    this.vx += forceDirectionX * force * directionMultiplier;
+                    this.vy += forceDirectionY * force * directionMultiplier;
                 }
             }
         }
 
-        // 2. Connect particle to MOUSE (The Interactive Part)
-        let mouseDistance = ((particlesArray[a].x - mouse.x) * (particlesArray[a].x - mouse.x))
-                          + ((particlesArray[a].y - mouse.y) * (particlesArray[a].y - mouse.y));
-
-        if (mouseDistance < 25000) { // Interaction radius
-             ctx.strokeStyle = 'rgba(0, 243, 255, 0.2)'; // CYAN accent when near mouse
-             ctx.lineWidth = 1;
-             ctx.beginPath();
-             ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-             ctx.lineTo(mouse.x, mouse.y);
-             ctx.stroke();
+        draw() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
         }
     }
-}
 
-// Animation Loop
-function animate() {
-    requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
     }
-    connect();
-}
 
-// Handle Resize
-window.addEventListener('resize', function() {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-    mouse.radius = ((canvas.height/80) * (canvas.height/80));
-    init();
-});
+    function animate() {
+        ctx.clearRect(0, 0, w, h);
+        
+        for (let i = 0; i < particles.length; i++) {
+            let p1 = particles[i];
+            p1.update();
+            p1.draw();
 
-// Run
-init();
-animate();
+            // Draw connections
+            for (let j = i; j < particles.length; j++) {
+                let p2 = particles[j];
+                let dx = p1.x - p2.x;
+                let dy = p1.y - p2.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
 
-// Remove mouse position when mouse leaves window
-window.addEventListener('mouseout', function() {
-    mouse.x = undefined;
-    mouse.y = undefined;
+                if (dist < connectionDist) {
+                    ctx.beginPath();
+                    // Opacity based on distance (fades out)
+                    let opacity = 1 - (dist / connectionDist);
+                    ctx.strokeStyle = `rgba(100, 255, 218, ${opacity * 0.15})`; // Cyan tint
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw Mouse Connections
+            if (mouse.x != null) {
+                let dx = p1.x - mouse.x;
+                let dy = p1.y - mouse.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+
+                if (dist < mouseDist) {
+                    ctx.beginPath();
+                    let opacity = 1 - (dist / mouseDist);
+                    ctx.strokeStyle = `rgba(10, 255, 240, ${opacity * 0.2})`; // Brighter Cyan for mouse
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    // Init
+    resize();
+    initParticles();
+    animate();
 });
