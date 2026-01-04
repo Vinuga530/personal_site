@@ -37,6 +37,7 @@ nav {
     -webkit-backdrop-filter: var(--glass-blur); /* Safari Support */
     border-bottom: 1px solid var(--glass-border);
     transition: all 0.3s ease;
+    will-change: auto;
 }
 
 /* ... Logo & Links remain the same ... */
@@ -61,6 +62,8 @@ nav {
     background: var(--glass-surface);
     border: 1px solid var(--glass-border);
     transition: background 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .stack-item:hover {
@@ -85,7 +88,7 @@ nav {
     position: relative;
     padding: 30px;
     border-radius: 16px;
-    overflow: hidden; /* Contains the shine effect */
+    overflow: clip;
     
     /* LIQUID GLASS SURFACE */
     background: linear-gradient(
@@ -103,6 +106,7 @@ nav {
         var(--glass-shadow);                       /* Outer Shadow */
         
     transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), border-color 0.4s ease;
+    z-index: 1;
 }
 
 /* The "Refraction" Shine Effect */
@@ -119,6 +123,12 @@ nav {
     );
     transition: left 0.6s ease;
     pointer-events: none;
+    z-index: 0;
+}
+
+.project-item > * {
+    position: relative;
+    z-index: 2;
 }
 
 .project-item:hover {
@@ -138,7 +148,7 @@ nav {
     margin-bottom: 12px;
 }
 .p-desc {
-    color: #aaaaaa; /* Lightened slightly for better readability on glass */
+    color: #bbbbbb; /* Improved contrast for readability on glass backgrounds */
 }
 
 
@@ -159,6 +169,14 @@ nav {
     
     transition: all 0.3s ease;
     text-decoration: none; /* Removed underline */
+    position: relative;
+    z-index: 1;
+}
+
+@supports not (backdrop-filter: blur(4px)) {
+    .email-btn {
+        background: rgba(5, 5, 5, 0.8);
+    }
 }
 
 .email-btn:hover {
