@@ -2,213 +2,168 @@
 
 /* --- 1. Variables & Reset --- */
 :root {
-    --bg: #000000;
+    --bg: #050505; /* Slightly deeper black for better contrast */
     --text-main: #e6e6e6;
-    --text-mute: #888888;
-    --accent: #0afff0; /* Electric Cyan */
+    --text-mute: #999999;
+    --accent: #0afff0; 
     --border: #222;
+    
+    /* NEW: Liquid Glass Tokens */
+    --glass-surface: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.15);
+    --glass-blur: blur(12px);
+    --glass-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
     
     --font-ui: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
-    
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* "The Apple Ease" */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ... Existing Resets ... */
 
-body {
-    background-color: var(--bg);
-    color: var(--text-main);
-    font-family: var(--font-ui);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    line-height: 1.6;
-}
-
-a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
-ul { list-style: none; }
-
-/* --- 2. Canvas Background --- */
-#canvas-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: -1;
-    pointer-events: none; /* Allows clicking through */
-}
-
-/* --- 3. Typography & Utilities --- */
-.mono-label, .mono-link, .mono-tag, .section-marker, .stack-head {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-mute);
-}
-
-.accent { color: var(--accent); }
-.white { color: #fff; font-weight: 500; }
-
-/* --- 4. Navigation --- */
+/* --- 4. Navigation (Liquid Header) --- */
+/* BEFORE: Simple fixed positioning with mix-blend-mode */
+/* AFTER: Frosted glass bar */
 nav {
     position: fixed;
     top: 0; width: 100%;
-    padding: 30px 50px;
+    padding: 20px 50px;
     z-index: 100;
-    mix-blend-mode: difference; /* Ensures visibility over any bg */
-}
-.nav-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-.logo { font-weight: 700; font-size: 20px; letter-spacing: -1px; }
-.nav-links { display: flex; gap: 30px; }
-.mono-link:hover { color: var(--accent); }
-
-/* --- 5. Animation Classes (The "Blur Reveal") --- */
-.reveal {
-    opacity: 0;
-    filter: blur(8px);
-    transform: translateY(20px);
-    transition: all 1s var(--ease-out);
+    
+    /* Liquid Effect */
+    background: rgba(5, 5, 5, 0.6); /* Semi-transparent dark */
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur); /* Safari Support */
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
 }
 
-.reveal.active {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
-}
+/* ... Logo & Links remain the same ... */
 
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
 
-/* --- 6. Hero Section --- */
-.hero {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 0 50px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
+/* --- 8. Stack & Projects (The Core Liquid UI) --- */
 
-.hero h1 {
-    font-size: clamp(40px, 8vw, 100px);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin: 20px 0;
-    color: #fff;
-}
-
-.hero h2 {
-    font-size: clamp(20px, 4vw, 32px);
-    font-weight: 300;
-    color: var(--text-mute);
-    max-width: 600px;
-}
-
-.hero-footer {
-    margin-top: 60px;
-    display: flex;
-    gap: 30px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--text-mute);
-}
-.location i { color: var(--accent); margin-right: 8px; }
-
-/* --- 7. Content Sections (Grid) --- */
-.content-section {
-    padding: 150px 50px;
-    max-width: 1400px;
-    margin: 0 auto;
-    border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.grid-layout {
-    display: grid;
-    grid-template-columns: 100px 1fr; /* Marker | Content */
-    gap: 40px;
-}
-
-.section-marker { color: var(--accent); }
-
-.section-head {
-    font-size: 32px;
-    font-weight: 500;
-    margin-bottom: 40px;
-    color: #fff;
-}
-
-.body-text {
-    font-size: 18px;
-    color: var(--text-mute);
-    max-width: 600px;
-    margin-bottom: 30px;
-    line-height: 1.7;
-}
-
-/* --- 8. Stack & Projects --- */
 .stack-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
+    gap: 20px; /* Tighter gap for tiles */
     margin-top: 60px;
 }
-.stack-item { display: flex; flex-direction: column; gap: 10px; }
-.stack-list { color: var(--text-main); font-size: 15px; }
 
+/* NEW: Glass Tiles for Skills */
+.stack-item {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--glass-surface);
+    border: 1px solid var(--glass-border);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.stack-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--glass-highlight);
+}
+
+
+/* NEW: Liquid Cards for Projects */
 .project-list {
     display: flex;
     flex-direction: column;
-    gap: 60px;
+    gap: 40px; /* Reduced gap slightly */
 }
 
 .project-item {
-    border-left: 2px solid #1a1a1a;
-    padding-left: 30px;
-    transition: border-color 0.4s ease;
+    /* RESET existing styles */
+    border-left: none; 
+    padding-left: 0;
+    
+    /* LAYOUT & SHAPE */
+    position: relative;
+    padding: 30px;
+    border-radius: 16px;
+    overflow: hidden; /* Contains the shine effect */
+    
+    /* LIQUID GLASS SURFACE */
+    background: linear-gradient(
+        145deg, 
+        rgba(255, 255, 255, 0.03) 0%, 
+        rgba(255, 255, 255, 0.01) 100%
+    );
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    
+    /* BORDERS & DEPTH */
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.05), /* Inner Top Light */
+        var(--glass-shadow);                       /* Outer Shadow */
+        
+    transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), border-color 0.4s ease;
 }
 
-.project-item:hover { border-color: var(--accent); }
+/* The "Refraction" Shine Effect */
+.project-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    transition: left 0.6s ease;
+    pointer-events: none;
+}
 
+.project-item:hover {
+    transform: translateY(-4px) scale(1.005);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+        0 20px 40px -5px rgba(0, 0, 0, 0.3); /* Deeper lift shadow */
+}
+
+.project-item:hover::before {
+    left: 100%; /* Sweeps the light across the card */
+}
+
+/* Project Text Adjustments for new BG */
 .p-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+}
+.p-desc {
+    color: #aaaaaa; /* Lightened slightly for better readability on glass */
 }
 
-.p-header h4 { font-size: 24px; font-weight: 500; }
-.p-desc { font-size: 16px; color: var(--text-mute); margin-bottom: 20px; max-width: 500px; }
-.p-link { font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
-.p-link:hover { color: var(--accent); }
 
-/* --- 9. Contact --- */
+/* --- 9. Contact (Liquid Button) --- */
 .email-btn {
-    font-size: clamp(24px, 5vw, 60px);
-    font-weight: 600;
-    color: #fff;
-    border-bottom: 1px solid #333;
-    padding-bottom: 10px;
-    display: inline-block;
+    /* Shape & Size */
+    font-size: clamp(20px, 4vw, 40px);
+    font-weight: 500;
+    padding: 20px 40px;
+    border-radius: 100px;
     margin: 40px 0;
+    
+    /* Glass Surface */
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(4px);
+    
+    transition: all 0.3s ease;
+    text-decoration: none; /* Removed underline */
 }
-.email-btn:hover { color: var(--accent); border-color: var(--accent); }
 
-.footer-links { display: flex; gap: 30px; font-family: var(--font-mono); font-size: 14px; }
-.footer-links a:hover { color: var(--accent); text-decoration: underline; }
-
-/* --- Mobile --- */
-@media (max-width: 768px) {
-    .nav-inner { padding: 0 20px; }
-    .nav-links { display: none; } /* Simplified for demo */
-    .hero, .content-section { padding: 100px 20px; }
-    .grid-layout { grid-template-columns: 1fr; }
-    .section-marker { margin-bottom: 20px; display: block; }
+.email-btn:hover {
+    background: rgba(10, 255, 240, 0.1); /* Tint with accent color */
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 30px rgba(10, 255, 240, 0.15);
 }
