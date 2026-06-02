@@ -1,141 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vinuga Kisath | Cybersec & Interface</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vinuga — Under Maintenance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    background: #f5f0e8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'DM Sans', sans-serif;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .noise {
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    border-bottom: 1px solid #d4c9b0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1410;
+    letter-spacing: -0.02em;
+  }
+
+  .offline-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8b7355;
+    border: 1px solid #c4b49a;
+    padding: 5px 14px;
+    border-radius: 2px;
+  }
+
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    z-index: 2;
+    min-height: calc(100vh - 120px);
+  }
+
+  .left {
+    padding: 72px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid #d4c9b0;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8b7355;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: #8b7355;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #1a1410;
+    margin-bottom: 32px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: #6b4f2a;
+  }
+
+  .desc {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #5c4f3a;
+    max-width: 340px;
+    margin-bottom: 64px;
+  }
+
+  .contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .contact-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a0906e;
+  }
+
+  .contact-value {
+    font-size: 13px;
+    font-weight: 400;
+    color: #1a1410;
+  }
+
+  .right {
+    padding: 72px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .status-heading {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8b7355;
+    margin-bottom: 24px;
+  }
+
+  .status-list {
+    list-style: none;
+    border-top: 1px solid #d4c9b0;
+  }
+
+  .status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #d4c9b0;
+    font-size: 13px;
+    color: #3d3226;
+  }
+
+  .status-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 400;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot.ok   { background: #5c7a52; }
+  .dot.work { background: #c49a3c; }
+
+  .pill {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 2px;
+  }
+
+  .pill.ok   { background: #ddecd9; color: #3d5c38; }
+  .pill.work { background: #f5e8c8; color: #7a5c1a; }
+
+  .big-year {
+    margin-top: 56px;
+    font-family: 'Playfair Display', serif;
+    font-size: 96px;
+    font-weight: 700;
+    color: #e0d5c2;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    user-select: none;
+  }
+
+  .big-year-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #b0a08a;
+    margin-top: 6px;
+  }
+
+  footer {
+    padding: 22px 48px;
+    border-top: 1px solid #d4c9b0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #a0906e;
+    letter-spacing: 0.06em;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Mobile */
+  @media (max-width: 680px) {
+    header { padding: 20px 24px; }
+
+    main {
+      grid-template-columns: 1fr;
+      min-height: unset;
+    }
+
+    .left {
+      padding: 48px 24px;
+      border-right: none;
+      border-bottom: 1px solid #d4c9b0;
+    }
+
+    .right {
+      padding: 48px 24px;
+    }
+
+    .big-year { font-size: 64px; }
+
+    footer { padding: 20px 24px; }
+  }
+</style>
 </head>
 <body>
 
-    <canvas id="canvas-bg"></canvas>
+<div class="noise"></div>
 
-    <nav>
-        <div class="nav-inner">
-            <a href="#" class="logo">VK<span class="accent">.</span></a>
-            <div class="nav-links">
-                <a href="#about" class="mono-link">01 // ABOUT</a>
-                <a href="#work" class="mono-link">02 // WORK</a>
-                <a href="#contact" class="mono-link">03 // CONTACT</a>
-            </div>
-        </div>
-    </nav>
+<header>
+  <div class="logo">Vinuga.dev</div>
+  <div class="offline-tag">Offline</div>
+</header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-container">
-                <p class="mono-label reveal">System Status: Online</p>
-                <h1 class="reveal delay-1">Vinuga Kisath</h1>
-                <h2 class="reveal delay-2">I build secure digital infrastructure<br>and minimal web interfaces.</h2>
-                <div class="hero-footer reveal delay-3">
-                    <span class="location"><i class="fa-solid fa-location-arrow"></i> Sri Lanka</span>
-                    <span class="role">Student / Developer / SecOps</span>
-                </div>
-            </div>
-        </section>
+<main>
+  <div class="left">
+    <div>
+      <div class="eyebrow">Maintenance</div>
+      <h1>
+        Taking a<br>moment to<br><em>rebuild.</em>
+      </h1>
+      <p class="desc">
+        The site is being redesigned from the ground up. Nothing is broken — it's just getting better. Check back soon.
+      </p>
+    </div>
+    <div class="contact-block">
+      <div class="contact-label">Contact</div>
+      <!-- Replace with your actual email -->
+      <div class="contact-value">vinuga@example.com</div>
+    </div>
+  </div>
 
-        <section id="about" class="content-section">
-            <div class="grid-layout">
-                <div class="col-left reveal">
-                    <span class="section-marker">01</span>
-                </div>
-                <div class="col-right">
-                    <h3 class="section-head reveal">Profile Data</h3>
-                    <p class="body-text reveal">
-                        I am an A/L student with a disciplined focus on <span class="white">Cybersecurity</span> and <span class="white">Full Stack Engineering</span>. 
-                    </p>
-                    <p class="body-text reveal">
-                        My work philosophy is simple: complexity should be internal, not external. I build systems that are robust against threats but intuitive for users.
-                    </p>
-                    
-                    <div class="stack-grid reveal">
-                        <div class="stack-item">
-                            <span class="stack-head">Languages</span>
-                            <span class="stack-list">Python, JavaScript (ES6+), SQL, Bash</span>
-                        </div>
-                        <div class="stack-item">
-                            <span class="stack-head">Frameworks</span>
-                            <span class="stack-list">React, Node.js, Tailwind, Vue</span>
-                        </div>
-                        <div class="stack-item">
-                            <span class="stack-head">Security</span>
-                            <span class="stack-list">Burp Suite, Nmap, Wireshark, Linux</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="right">
+    <div class="status-heading">System Status</div>
+    <ul class="status-list">
+      <li class="status-item">
+        <span class="status-name"><span class="dot ok"></span>DNS</span>
+        <span class="pill ok">Operational</span>
+      </li>
+      <li class="status-item">
+        <span class="status-name"><span class="dot ok"></span>Server</span>
+        <span class="pill ok">Operational</span>
+      </li>
+      <li class="status-item">
+        <span class="status-name"><span class="dot work"></span>Site</span>
+        <span class="pill work">Rebuilding</span>
+      </li>
+    </ul>
 
-        <section id="work" class="content-section">
-            <div class="grid-layout">
-                <div class="col-left reveal">
-                    <span class="section-marker">02</span>
-                </div>
-                <div class="col-right">
-                    <h3 class="section-head reveal">Selected Projects</h3>
-                    
-                    <div class="project-list">
-                        <div class="project-item reveal">
-                            <div class="p-header">
-                                <h4>VulnScanner CLI</h4>
-                                <span class="mono-tag">Python / Nmap</span>
-                            </div>
-                            <p class="p-desc">Automated network vulnerability scanner with report generation.</p>
-                            <a href="#" class="p-link">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
+    <div class="big-year">2026</div>
+    <div class="big-year-label">Expected launch</div>
+  </div>
+</main>
 
-                        <div class="project-item reveal">
-                            <div class="p-header">
-                                <h4>SecureHome IoT</h4>
-                                <span class="mono-tag">React / Firebase</span>
-                            </div>
-                            <p class="p-desc">Real-time dashboard for monitoring home energy and security sensors.</p>
-                            <a href="#" class="p-link">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
+<footer>
+  <span>© 2026 Vinuga</span>
+  <span>Powered by Vercel</span>
+</footer>
 
-                        <div class="project-item reveal">
-                            <div class="p-header">
-                                <h4>Minimal Notes</h4>
-                                <span class="mono-tag">Vue.js / LocalStorage</span>
-                            </div>
-                            <p class="p-desc">Encryption-ready markdown editor for distraction-free writing.</p>
-                            <a href="#" class="p-link">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="content-section">
-            <div class="grid-layout">
-                <div class="col-left reveal">
-                    <span class="section-marker">03</span>
-                </div>
-                <div class="col-right">
-                    <h3 class="section-head reveal">Initiate Uplink</h3>
-                    <p class="body-text reveal">
-                        Currently open to internships and collaborative projects.
-                    </p>
-                    <a href="mailto:hello@vinugakisath.site" class="email-btn reveal">hello@vinugakisath.site</a>
-                    
-                    <div class="footer-links reveal">
-                        <a href="https://github.com/Vinuga530">Github</a>
-                        <a href="https://lk.linkedin.com/in/vinugakisath">LinkedIn</a>
-                        <a href="https://www.instagram.com/vinuga.jpg/">Instagram</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script src="script.js"></script>
 </body>
 </html>
