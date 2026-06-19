@@ -1,192 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VinugaK | Portfolio</title>
-  
-  <!-- Fonts: Playfair Display & DM Sans[cite: 1] -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  
-  <!-- Your Liquid Glass CSS -->
-  <link rel="stylesheet" href="style.css" />
-  
-  <style>
-    /* Specific overrides to merge the vibes */
-    .noise {
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      opacity: 0.5;
-      z-index: var(--z-hide);
-    }
-    
-    #canvas-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: var(--z-hide);
-      pointer-events: none;
-    }
-
-    /* Scroll Reveal Base Class */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s var(--ease-out);
-    }
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .tech-icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: var(--spacing-sm);
-    }
-    
-    .tech-card {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VinugaK | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Background Elements[cite: 1, 2] -->
-  <div class="noise"></div>
-  <canvas id="canvas-bg"></canvas>
+<div class="noise"></div>
+<canvas id="canvas-bg"></canvas>
 
-  <!-- Navigation[cite: 3] -->
-  <nav>
-    <div class="logo">Vinuga_K</div>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#stack">Stack</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact" class="btn btn-primary" style="padding: 8px 16px;">Contact</a></li>
-    </ul>
+<header>
+  <div class="logo">Vinuga_K</div>
+  <nav class="nav-links">
+    <a href="#about">About</a>
+    <a href="#stack">Stack</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
   </nav>
+</header>
 
-  <!-- Hero Section[cite: 3] -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="eyebrow" style="color: var(--color-secondary); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; font-size: 12px; font-weight: 500;">Welcome</div>
-      <h1>Engineering <em>Secure</em> & <br>Minimal Digital Experiences.</h1>
-      <p>I build high-performance web applications and robust network architectures with a focus on seamless design and impenetrable security.</p>
-      <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">View My Work</a>
-        <a href="#about" class="btn btn-secondary">Learn More</a>
+<main>
+  <section class="section" id="home">
+    <div class="eyebrow">Initialize</div>
+    <h1>
+      Engineering<br>
+      <em>secure</em> & minimal<br>
+      experiences.
+    </h1>
+    <p class="desc">
+      I build high-performance web applications and robust network architectures with a focus on seamless design and impenetrable security.
+    </p>
+  </section>
+
+  <section class="section reveal" id="stack">
+    <div class="eyebrow">Technical Arsenal</div>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" />
+        <span>Python</span>
+      </div>
+      <div class="stack-item">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" />
+        <span>C#</span>
+      </div>
+      <div class="stack-item">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" />
+        <span>C++</span>
+      </div>
+      <div class="stack-item">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" />
+        <span>PHP</span>
+      </div>
+      <div class="stack-item">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" />
+        <span>HTML5</span>
+      </div>
+      <div class="stack-item">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" />
+        <span>CSS3</span>
+      </div>
+      <div class="stack-item">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" />
+        <span>JavaScript</span>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about" class="container reveal">
-    <div class="section-title">
-      <h2>About Me</h2>
-    </div>
-    <div class="card glass-heavy" style="max-width: 800px; margin: 0 auto; text-align: center;">
-      <p class="text-lg">
-        I am a forward-thinking student and aspiring cybersecurity professional with a relentless focus on network security, risk management, and software development. Driven by a disciplined approach to learning, I thrive on building efficient, secure systems and understanding the deep mechanics of IT infrastructure. Whether I am architecting a new web application or exploring network protocols, my goal is always to deliver practical, high-quality solutions while continuously pushing the boundaries of my technical mastery.
-      </p>
-      <div class="flex-center gap-md" style="margin-top: var(--spacing-lg);">
-        <span class="badge">Leadership-Oriented</span>
-        <span class="badge badge-success">Cybersecurity Focus</span>
-        <span class="badge badge-warning">Continuous Learner</span>
-      </div>
-    </div>
+  <section class="section reveal" id="projects">
+    <div class="eyebrow">Live Feed</div>
+    <h2 class="sub-heading" style="margin-bottom: 32px;">Featured Repositories</h2>
+    
+    <ul class="status-list" id="github-container">
+      <li class="status-item" id="loading-text">
+        <span class="status-name"><span class="dot work"></span>Fetching secure data from GitHub...</span>
+      </li>
+    </ul>
   </section>
 
-  <!-- Tech Stack Section -->
-  <section id="stack" class="container reveal">
-    <div class="section-title">
-      <h2>Technical Arsenal</h2>
-      <p>Languages and technologies I utilize to build and secure digital infrastructure.</p>
-    </div>
-    <div class="grid grid-4">
-      <!-- Icons sourced from Devicon for high-quality SVGs -->
-      <div class="card glass tech-card">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="tech-icon" alt="Python" />
-        <h6 class="m-0">Python</h6>
-      </div>
-      <div class="card glass tech-card">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" class="tech-icon" alt="C#" />
-        <h6 class="m-0">C#</h6>
-      </div>
-      <div class="card glass tech-card">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" class="tech-icon" alt="C++" />
-        <h6 class="m-0">C++</h6>
-      </div>
-      <div class="card glass tech-card">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" class="tech-icon" alt="PHP" />
-        <h6 class="m-0">PHP</h6>
-      </div>
-      <div class="card glass tech-card">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" class="tech-icon" alt="HTML" />
-        <h6 class="m-0">HTML5</h6>
-      </div>
-      <div class="card glass tech-card">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" class="tech-icon" alt="CSS" />
-        <h6 class="m-0">CSS3</h6>
-      </div>
-      <div class="card glass tech-card">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="tech-icon" alt="JavaScript" />
-        <h6 class="m-0">JavaScript</h6>
-      </div>
-    </div>
+  <section class="section reveal" id="about">
+    <div class="eyebrow">Profile</div>
+    <h2 class="sub-heading">
+      I am a forward-thinking student and aspiring cybersecurity professional with a relentless focus on network security, risk management, and software development. 
+    </h2>
+    <p class="desc" style="max-width: 600px;">
+      Driven by a disciplined approach to learning, I thrive on building efficient, secure systems and understanding the deep mechanics of IT infrastructure. Whether I am architecting a new web application or exploring network protocols, my goal is always to deliver practical, high-quality solutions while continuously pushing the boundaries of my technical mastery.
+    </p>
   </section>
-
-  <!-- Dynamic GitHub Projects Section -->
-  <section id="projects" class="container reveal">
-    <div class="section-title">
-      <h2>Featured Projects</h2>
-      <p>A live feed of my recent repositories from GitHub.</p>
-    </div>
-    <div id="github-container" class="grid grid-2">
-      <!-- Cards will be injected here via JavaScript -->
-      <p class="text-center w-100" id="loading-text">Fetching secure data from GitHub...</p>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="container reveal">
-    <div class="section-title">
-      <h2>Initiate Contact</h2>
-    </div>
-    <div class="card glass" style="max-width: 600px; margin: 0 auto;">
-      <div class="flex-col gap-lg text-center">
-        <div>
-          <div class="text-xs" style="letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 8px;">Direct Comm Link</div>
-          <h3 class="m-0">vkisath2@gmail.com</h3>
-        </div>
-        <div>
-          <a href="https://www.linkedin.com/in/vinugakisath/" target="_blank" class="btn btn-secondary m-sm">LinkedIn Profile</a>
-          <a href="https://github.com/Vinuga530/" target="_blank" class="btn btn-secondary m-sm">GitHub Profile</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer[cite: 1] -->
-  <footer>
-    <div class="footer-bottom container m-0">
-      <span>© 2026 Vinuga Kisath Abeykoon.</span>
-      <span>System Status: <span style="color: var(--color-accent-success);">Operational</span></span>
-    </div>
-  </footer>
-
-  <!-- Link your scripts here -->
-  <script src="script.js"></script>
-  <script src="github-fetch.js"></script>
-</body>
-</html>
