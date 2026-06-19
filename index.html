@@ -1,315 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Vinuga — Under Maintenance</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body {
-    height: 100%;
-  }
-
-  body {
-    background: #f5f0e8;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    font-family: 'DM Sans', sans-serif;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  .noise {
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.5;
-    z-index: 0;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 48px;
-    border-bottom: 1px solid #d4c9b0;
-    position: relative;
-    z-index: 2;
-  }
-
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: #1a1410;
-    letter-spacing: -0.02em;
-  }
-
-  .offline-tag {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #8b7355;
-    border: 1px solid #c4b49a;
-    padding: 5px 14px;
-    border-radius: 2px;
-  }
-
-  main {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: relative;
-    z-index: 2;
-    min-height: calc(100vh - 120px);
-  }
-
-  .left {
-    padding: 72px 48px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-right: 1px solid #d4c9b0;
-  }
-
-  .eyebrow {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #8b7355;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .eyebrow::before {
-    content: '';
-    display: block;
-    width: 28px;
-    height: 1px;
-    background: #8b7355;
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 4.5vw, 4rem);
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    color: #1a1410;
-    margin-bottom: 32px;
-  }
-
-  h1 em {
-    font-style: italic;
-    color: #6b4f2a;
-  }
-
-  .desc {
-    font-size: 15px;
-    font-weight: 300;
-    line-height: 1.8;
-    color: #5c4f3a;
-    max-width: 340px;
-    margin-bottom: 64px;
-  }
-
-  .contact-block {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .contact-label {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #a0906e;
-  }
-
-  .contact-value {
-    font-size: 13px;
-    font-weight: 400;
-    color: #1a1410;
-  }
-
-  .right {
-    padding: 72px 48px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .status-heading {
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #8b7355;
-    margin-bottom: 24px;
-  }
-
-  .status-list {
-    list-style: none;
-    border-top: 1px solid #d4c9b0;
-  }
-
-  .status-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 0;
-    border-bottom: 1px solid #d4c9b0;
-    font-size: 13px;
-    color: #3d3226;
-  }
-
-  .status-name {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 400;
-  }
-
-  .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .dot.ok   { background: #5c7a52; }
-  .dot.work { background: #c49a3c; }
-
-  .pill {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 500;
-    padding: 4px 12px;
-    border-radius: 2px;
-  }
-
-  .pill.ok   { background: #ddecd9; color: #3d5c38; }
-  .pill.work { background: #f5e8c8; color: #7a5c1a; }
-
-  .big-year {
-    margin-top: 56px;
-    font-family: 'Playfair Display', serif;
-    font-size: 96px;
-    font-weight: 700;
-    color: #e0d5c2;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    user-select: none;
-  }
-
-  .big-year-label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #b0a08a;
-    margin-top: 6px;
-  }
-
-  footer {
-    padding: 22px 48px;
-    border-top: 1px solid #d4c9b0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    color: #a0906e;
-    letter-spacing: 0.06em;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Mobile */
-  @media (max-width: 680px) {
-    header { padding: 20px 24px; }
-
-    main {
-      grid-template-columns: 1fr;
-      min-height: unset;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VinugaK | Portfolio</title>
+  
+  <!-- Fonts: Playfair Display & DM Sans[cite: 1] -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  
+  <!-- Your Liquid Glass CSS -->
+  <link rel="stylesheet" href="style.css" />
+  
+  <style>
+    /* Specific overrides to merge the vibes */
+    .noise {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.5;
+      z-index: var(--z-hide);
+    }
+    
+    #canvas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: var(--z-hide);
+      pointer-events: none;
     }
 
-    .left {
-      padding: 48px 24px;
-      border-right: none;
-      border-bottom: 1px solid #d4c9b0;
+    /* Scroll Reveal Base Class */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s var(--ease-out);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .right {
-      padding: 48px 24px;
+    .tech-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: var(--spacing-sm);
     }
-
-    .big-year { font-size: 64px; }
-
-    footer { padding: 20px 24px; }
-  }
-</style>
+    
+    .tech-card {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
 
-<div class="noise"></div>
+  <!-- Background Elements[cite: 1, 2] -->
+  <div class="noise"></div>
+  <canvas id="canvas-bg"></canvas>
 
-<header>
-  <div class="logo">Vinuga_K</div>
-  <div class="offline-tag">Offline</div>
-</header>
-
-<main>
-  <div class="left">
-    <div>
-      <div class="eyebrow">Maintenance</div>
-      <h1>
-        Taking a<br>moment to<br><em>rebuild.</em>
-      </h1>
-      <p class="desc">
-        The site is being redesigned from the ground up. Nothing is broken — it's just getting better. Check back soon.
-      </p>
-    </div>
-    <div class="contact-block">
-      <div class="contact-label">Contact</div>
-      <div class="contact-value">vkisath2@gmail.com</div>
-    </div>
-  </div>
-
-  <div class="right">
-    <div class="status-heading">System Status</div>
-    <ul class="status-list">
-      <li class="status-item">
-        <span class="status-name"><span class="dot ok"></span>DNS</span>
-        <span class="pill ok">Operational</span>
-      </li>
-      <li class="status-item">
-        <span class="status-name"><span class="dot ok"></span>Server</span>
-        <span class="pill ok">Operational</span>
-      </li>
-      <li class="status-item">
-        <span class="status-name"><span class="dot work"></span>Site</span>
-        <span class="pill work">Rebuilding</span>
-      </li>
+  <!-- Navigation[cite: 3] -->
+  <nav>
+    <div class="logo">Vinuga_K</div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact" class="btn btn-primary" style="padding: 8px 16px;">Contact</a></li>
     </ul>
+  </nav>
 
-    <div class="big-year">2026</div>
-    <div class="big-year-label">Expected launch</div>
-  </div>
-</main>
+  <!-- Hero Section[cite: 3] -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="eyebrow" style="color: var(--color-secondary); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; font-size: 12px; font-weight: 500;">Welcome</div>
+      <h1>Engineering <em>Secure</em> & <br>Minimal Digital Experiences.</h1>
+      <p>I build high-performance web applications and robust network architectures with a focus on seamless design and impenetrable security.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View My Work</a>
+        <a href="#about" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
 
-<footer>
-  <span>© 2026 Vinuga</span>
-  <span>Powered by Vercel</span>
-</footer>
+  <!-- About Section -->
+  <section id="about" class="container reveal">
+    <div class="section-title">
+      <h2>About Me</h2>
+    </div>
+    <div class="card glass-heavy" style="max-width: 800px; margin: 0 auto; text-align: center;">
+      <p class="text-lg">
+        I am a forward-thinking student and aspiring cybersecurity professional with a relentless focus on network security, risk management, and software development. Driven by a disciplined approach to learning, I thrive on building efficient, secure systems and understanding the deep mechanics of IT infrastructure. Whether I am architecting a new web application or exploring network protocols, my goal is always to deliver practical, high-quality solutions while continuously pushing the boundaries of my technical mastery.
+      </p>
+      <div class="flex-center gap-md" style="margin-top: var(--spacing-lg);">
+        <span class="badge">Leadership-Oriented</span>
+        <span class="badge badge-success">Cybersecurity Focus</span>
+        <span class="badge badge-warning">Continuous Learner</span>
+      </div>
+    </div>
+  </section>
 
+  <!-- Tech Stack Section -->
+  <section id="stack" class="container reveal">
+    <div class="section-title">
+      <h2>Technical Arsenal</h2>
+      <p>Languages and technologies I utilize to build and secure digital infrastructure.</p>
+    </div>
+    <div class="grid grid-4">
+      <!-- Icons sourced from Devicon for high-quality SVGs -->
+      <div class="card glass tech-card">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="tech-icon" alt="Python" />
+        <h6 class="m-0">Python</h6>
+      </div>
+      <div class="card glass tech-card">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" class="tech-icon" alt="C#" />
+        <h6 class="m-0">C#</h6>
+      </div>
+      <div class="card glass tech-card">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" class="tech-icon" alt="C++" />
+        <h6 class="m-0">C++</h6>
+      </div>
+      <div class="card glass tech-card">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" class="tech-icon" alt="PHP" />
+        <h6 class="m-0">PHP</h6>
+      </div>
+      <div class="card glass tech-card">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" class="tech-icon" alt="HTML" />
+        <h6 class="m-0">HTML5</h6>
+      </div>
+      <div class="card glass tech-card">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" class="tech-icon" alt="CSS" />
+        <h6 class="m-0">CSS3</h6>
+      </div>
+      <div class="card glass tech-card">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="tech-icon" alt="JavaScript" />
+        <h6 class="m-0">JavaScript</h6>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dynamic GitHub Projects Section -->
+  <section id="projects" class="container reveal">
+    <div class="section-title">
+      <h2>Featured Projects</h2>
+      <p>A live feed of my recent repositories from GitHub.</p>
+    </div>
+    <div id="github-container" class="grid grid-2">
+      <!-- Cards will be injected here via JavaScript -->
+      <p class="text-center w-100" id="loading-text">Fetching secure data from GitHub...</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="container reveal">
+    <div class="section-title">
+      <h2>Initiate Contact</h2>
+    </div>
+    <div class="card glass" style="max-width: 600px; margin: 0 auto;">
+      <div class="flex-col gap-lg text-center">
+        <div>
+          <div class="text-xs" style="letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 8px;">Direct Comm Link</div>
+          <h3 class="m-0">vkisath2@gmail.com</h3>
+        </div>
+        <div>
+          <a href="https://www.linkedin.com/in/vinugakisath/" target="_blank" class="btn btn-secondary m-sm">LinkedIn Profile</a>
+          <a href="https://github.com/Vinuga530/" target="_blank" class="btn btn-secondary m-sm">GitHub Profile</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer[cite: 1] -->
+  <footer>
+    <div class="footer-bottom container m-0">
+      <span>© 2026 Vinuga Kisath Abeykoon.</span>
+      <span>System Status: <span style="color: var(--color-accent-success);">Operational</span></span>
+    </div>
+  </footer>
+
+  <!-- Link your scripts here -->
+  <script src="script.js"></script>
+  <script src="github-fetch.js"></script>
 </body>
 </html>
