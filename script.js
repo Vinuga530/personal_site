@@ -1,8 +1,40 @@
-/* script.js */
-
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. Reveal Animation ---
+    // --- 1. Theme Setup ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeLabel = document.getElementById('theme-label');
+    const root = document.documentElement;
+    
+    // Check saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    root.setAttribute('data-theme', savedTheme);
+    themeLabel.textContent = savedTheme.toUpperCase();
+
+    // Variables to hold particle colors
+    let pRgb = '139, 115, 85';
+    let pInteract = '107, 79, 42';
+
+    function updateCanvasColors() {
+        // Read CSS variables on load/toggle to avoid querying DOM every frame
+        const computed = getComputedStyle(root);
+        pRgb = computed.getPropertyValue('--particle-rgb').trim() || '139, 115, 85';
+        pInteract = computed.getPropertyValue('--particle-interact').trim() || '107, 79, 42';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        let currentTheme = root.getAttribute('data-theme');
+        let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        root.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        themeLabel.textContent = newTheme.toUpperCase();
+        
+        updateCanvasColors(); // Sync canvas to new theme
+    });
+
+    updateCanvasColors(); // Initial sync
+
+    // --- 2. Reveal Animation ---
     const observerOptions = {
         root: null,
         rootMargin: '0px',
@@ -19,17 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-
-    // --- 2. Minimal Particle Network ---
+ // --- 3. Nothing CMF Style Interactive Grid ---
     const canvas = document.getElementById('canvas-bg');
     if(canvas) {
         const ctx = canvas.getContext('2d');
         let w, h;
         let particles = [];
         
-        const particleCount = 60; 
-        const connectionDist = 150;
-        const mouseDist = 200;
+        // Grid Configuration
+        const spacing = 45; // Distance between dots
+        const baseSize = 1; // Default dot size
+        const maxAddedSize = 2; // How much larger they get near mouse
+        const interactionRadius = 150; // How far the mouse effect reaches
+        
         const mouse = { x: null, y: null };
 
         window.addEventListener('mousemove', (e) => {
@@ -37,48 +71,73 @@ document.addEventListener('DOMContentLoaded', () => {
             mouse.y = e.y;
         });
 
+        // Reset mouse when it leaves the window
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
         window.addEventListener('resize', resize);
 
         function resize() {
             w = canvas.width = window.innerWidth;
             h = canvas.height = window.innerHeight;
+            initParticles(); // Rebuild grid perfectly on resize
         }
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 1.5;
+        class GridDot {
+            constructor(x, y) {
+                this.baseX = x;
+                this.baseY = y;
+                this.x = x;
+                this.y = y;
+                this.size = baseSize;
+                this.targetSize = baseSize;
+                this.opacity = 0.15;
+                this.targetOpacity = 0.15;
             }
 
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
+                if (mouse.x != null && mouse.y != null) {
+                    let dx = mouse.x - this.baseX;
+                    let dy = mouse.y - this.baseY;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
 
-                if (this.x < 0 || this.x > w) this.vx *= -1;
-                if (this.y < 0 || this.y > h) this.vy *= -1;
-
-                if (mouse.x != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx*dx + dy*dy);
-
-                    if (distance < mouseDist) {
-                        const forceDirectionX = dx / distance;
-                        const forceDirectionY = dy / distance;
-                        const force = (mouseDist - distance) / mouseDist;
-                        const directionMultiplier = 0.03; 
-                        this.vx += forceDirectionX * force * directionMultiplier;
-                        this.vy += forceDirectionY * force * directionMultiplier;
+                    if (dist < interactionRadius) {
+                        // Calculate force based on proximity (closer = stronger)
+                        const force = (interactionRadius - dist) / interactionRadius;
+                        
+                        this.targetSize = baseSize + (force * maxAddedSize);
+                        this.targetOpacity = 0.15 + (force * 0.7); // Brightens up to 85% opacity
+                        
+                        // Subtle displacement (magnetic push)
+                        const angle = Math.atan2(dy, dx);
+                        const push = force * 6; // Max push distance in pixels
+                        this.x = this.baseX - Math.cos(angle) * push;
+                        this.y = this.baseY - Math.sin(angle) * push;
+                    } else {
+                        // Return to baseline if outside radius
+                        this.targetSize = baseSize;
+                        this.targetOpacity = 0.15;
+                        this.x = this.baseX;
+                        this.y = this.baseY;
                     }
+                } else {
+                    // Return to baseline if mouse is off-screen
+                    this.targetSize = baseSize;
+                    this.targetOpacity = 0.15;
+                    this.x = this.baseX;
+                    this.y = this.baseY;
                 }
+
+                // Smooth linear interpolation (lerp) for the transition
+                this.size += (this.targetSize - this.size) * 0.15;
+                this.opacity += (this.targetOpacity - this.opacity) * 0.15;
             }
 
             draw() {
-                // Warm off-white for particles
-                ctx.fillStyle = 'rgba(139, 115, 85, 0.4)';
+                // Uses the CSS variable color established in Section 1
+                ctx.fillStyle = `rgba(${pRgb}, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -87,8 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
+            const cols = Math.floor(w / spacing);
+            const rows = Math.floor(h / spacing);
+            
+            // Calculate offsets to perfectly center the grid on screen
+            const offsetX = (w - (cols * spacing)) / 2;
+            const offsetY = (h - (rows * spacing)) / 2;
+
+            for (let i = 0; i <= cols; i++) {
+                for (let j = 0; j <= rows; j++) {
+                    particles.push(new GridDot(offsetX + (i * spacing), offsetY + (j * spacing)));
+                }
             }
         }
 
@@ -96,54 +164,17 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.clearRect(0, 0, w, h);
             
             for (let i = 0; i < particles.length; i++) {
-                let p1 = particles[i];
-                p1.update();
-                p1.draw();
-
-                for (let j = i; j < particles.length; j++) {
-                    let p2 = particles[j];
-                    let dx = p1.x - p2.x;
-                    let dy = p1.y - p2.y;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
-
-                    if (dist < connectionDist) {
-                        ctx.beginPath();
-                        let opacity = 1 - (dist / connectionDist);
-                        // Swapped to match the #8b7355 brown color palette
-                        ctx.strokeStyle = `rgba(139, 115, 85, ${opacity * 0.15})`; 
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-
-                if (mouse.x != null) {
-                    let dx = p1.x - mouse.x;
-                    let dy = p1.y - mouse.y;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
-
-                    if (dist < mouseDist) {
-                        ctx.beginPath();
-                        let opacity = 1 - (dist / mouseDist);
-                        // Darker brown connection for mouse interaction
-                        ctx.strokeStyle = `rgba(107, 79, 42, ${opacity * 0.25})`; 
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
-                    }
-                }
+                particles[i].update();
+                particles[i].draw();
             }
+            
             requestAnimationFrame(animate);
         }
 
         resize();
-        initParticles();
         animate();
     }
-
-    // --- 3. GitHub API Fetch ---
+    // --- 4. GitHub API Fetch ---
     const username = 'Vinuga530';
     const container = document.getElementById('github-container');
     const loadingText = document.getElementById('loading-text');
@@ -176,14 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     container.appendChild(li);
                     
-                    // Observe new injected elements
                     observer.observe(li);
                 });
             })
             .catch(error => {
                 console.error('Error fetching repos:', error);
                 if (loadingText) {
-                    loadingText.innerHTML = `<span class="status-name"><span class="dot work" style="background:#ff3b30;"></span>Failed to load data.</span>`;
+                    loadingText.innerHTML = `<span class="status-name" style="padding: 24px 0; display: block;"><span class="dot work" style="background:#ff3b30;"></span>Failed to load data.</span>`;
                 }
             });
     }

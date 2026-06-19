@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,11 +17,17 @@
 
 <header>
   <div class="logo">Vinuga_K</div>
-  <nav class="nav-links">
-    <a href="#about">About</a>
-    <a href="#stack">Stack</a>
-    <a href="#projects">Projects</a>
-  </nav>
+  <div style="display: flex; align-items: center; gap: 24px;">
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#stack">Stack</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+      [ THEME: <span id="theme-label">LIGHT</span> ]
+    </button>
+  </div>
 </header>
 
 <main>
@@ -76,7 +82,7 @@
     
     <ul class="status-list" id="github-container">
       <li class="status-item" id="loading-text">
-        <span class="status-name"><span class="dot work"></span>Fetching secure data from GitHub...</span>
+        <span class="status-name" style="padding: 24px 0; display: block;"><span class="dot work"></span>Fetching secure data from GitHub...</span>
       </li>
     </ul>
   </section>
@@ -90,7 +96,31 @@
       I spend most of my time in networks and systems, picking apart how things get attacked so I can learn how to defend them properly. Outside of that, I'm probably gaming, tinkering with a side project, or down a rabbit hole about whatever new tool just dropped. No grand mission statement here — just someone who likes getting better at this, one skill at a time.
     </p>
   </section>
+
+  <section class="section reveal" id="contact">
+    <div class="eyebrow">Comm Link</div>
+    <h2 class="sub-heading" style="margin-bottom: 32px;">Let's Connect</h2>
+    <div class="contact-grid">
+      <div class="contact-block">
+        <span class="contact-label">GitHub</span>
+        <a href="https://github.com/Vinuga530" target="_blank" class="contact-value">@Vinuga530</a>
+      </div>
+      <div class="contact-block">
+        <span class="contact-label">Instagram</span>
+        <a href="https://instagram.com/vinuga.jpg" target="_blank" class="contact-value">@vinuga.jpg</a>
+      </div>
+      <div class="contact-block">
+        <span class="contact-label">Email</span>
+        <a href="mailto:vkisath2@gmail.com" class="contact-value">Reach Out</a>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <span>© 2026 VinugaK. All rights reserved.</span>
+  <span>Based in Sri Lanka.</span>
+</footer>
 
 <script src="script.js"></script>
 </body>
