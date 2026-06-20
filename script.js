@@ -4,21 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const themeLabel = document.getElementById('theme-label');
     const root = document.documentElement;
-    
-    // Check saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    root.setAttribute('data-theme', savedTheme);
-    themeLabel.textContent = savedTheme.toUpperCase();
 
-    // Variables to hold particle colors
-    let pRgb = '139, 115, 85';
-    let pInteract = '107, 79, 42';
+    // Theme itself is already applied by the inline script in <head>,
+    // before first paint — that's what kills the flash on load.
+    // Here we just sync the visible label to match.
+    themeLabel.textContent = root.getAttribute('data-theme').toUpperCase();
+
+    // Variables to hold particle colors (idle vs. near-mouse), as [r, g, b]
+    let pRgb = [139, 115, 85];
+    let pInteract = [107, 79, 42];
 
     function updateCanvasColors() {
         // Read CSS variables on load/toggle to avoid querying DOM every frame
         const computed = getComputedStyle(root);
-        pRgb = computed.getPropertyValue('--particle-rgb').trim() || '139, 115, 85';
-        pInteract = computed.getPropertyValue('--particle-interact').trim() || '107, 79, 42';
+        pRgb = (computed.getPropertyValue('--particle-rgb').trim() || '139, 115, 85').split(',').map(Number);
+        pInteract = (computed.getPropertyValue('--particle-interact').trim() || '107, 79, 42').split(',').map(Number);
     }
 
     themeToggle.addEventListener('click', () => {
@@ -50,6 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Stagger the inner items of each reveal section so they cascade in
+    // rather than popping together all at once.
+    const applyStagger = (selector, stepMs = 60) => {
+        document.querySelectorAll(selector).forEach((el, i) => {
+            el.style.transitionDelay = `${i * stepMs}ms`;
+        });
+    };
+    applyStagger('.stack-item');
+    applyStagger('.contact-block');
 
  // --- 3. Nothing CMF Style Interactive Grid ---
     const canvas = document.getElementById('canvas-bg');
@@ -95,6 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.targetSize = baseSize;
                 this.opacity = 0.15;
                 this.targetOpacity = 0.15;
+                this.colorMix = 0; // 0 = idle color, 1 = interact color
+                this.targetColorMix = 0;
             }
 
             update() {
@@ -109,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         this.targetSize = baseSize + (force * maxAddedSize);
                         this.targetOpacity = 0.15 + (force * 0.7); // Brightens up to 85% opacity
+                        this.targetColorMix = force; // Shifts toward the interact color
                         
                         // Subtle displacement (magnetic push)
                         const angle = Math.atan2(dy, dx);
@@ -119,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Return to baseline if outside radius
                         this.targetSize = baseSize;
                         this.targetOpacity = 0.15;
+                        this.targetColorMix = 0;
                         this.x = this.baseX;
                         this.y = this.baseY;
                     }
@@ -126,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Return to baseline if mouse is off-screen
                     this.targetSize = baseSize;
                     this.targetOpacity = 0.15;
+                    this.targetColorMix = 0;
                     this.x = this.baseX;
                     this.y = this.baseY;
                 }
@@ -133,11 +148,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Smooth linear interpolation (lerp) for the transition
                 this.size += (this.targetSize - this.size) * 0.15;
                 this.opacity += (this.targetOpacity - this.opacity) * 0.15;
+                this.colorMix += (this.targetColorMix - this.colorMix) * 0.15;
             }
 
             draw() {
-                // Uses the CSS variable color established in Section 1
-                ctx.fillStyle = `rgba(${pRgb}, ${this.opacity})`;
+                // Lerp between idle color and interact color based on proximity
+                const r = pRgb[0] + (pInteract[0] - pRgb[0]) * this.colorMix;
+                const g = pRgb[1] + (pInteract[1] - pRgb[1]) * this.colorMix;
+                const b = pRgb[2] + (pInteract[2] - pRgb[2]) * this.colorMix;
+                ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -188,9 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(repos => {
                 if (loadingText) loadingText.remove();
 
-                repos.forEach(repo => {
+                repos.forEach((repo, index) => {
                     const li = document.createElement('li');
                     li.className = 'project-item reveal';
+                    li.style.transitionDelay = `${index * 80}ms`;
                     
                     const lang = repo.language || 'Documentation';
                     const desc = repo.description || 'No description provided.';
