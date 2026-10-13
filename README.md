@@ -80,9 +80,9 @@ This portfolio is a **living project**.
 
 For collaboration or professional inquiries:
 
-- Email: *(add when ready)*
-- GitHub / LinkedIn: *(linked on the site when finalized)*
+- Email: vkisath2@gmail.com
+- GitHub / LinkedIn: https://www.linkedin.com/in/vinugakisath/
 
 ---
 
-© 2025 VinugaK. All rights reserved.
+© 2026 VinugaK. All rights reserved.
