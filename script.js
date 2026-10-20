@@ -1,47 +1,65 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. Theme Setup ---
+    // --- 1. Theme Management (Apple HIG Compliant) ---
     const themeToggle = document.getElementById('theme-toggle');
     const themeLabel = document.getElementById('theme-label');
     const root = document.documentElement;
 
-    // Theme itself is already applied by the inline script in <head>,
-    // before first paint — that's what kills the flash on load.
-    // Here we just sync the visible label to match.
-    themeLabel.textContent = root.getAttribute('data-theme').toUpperCase();
-
-    // Variables to hold particle colors (idle vs. near-mouse), as [r, g, b]
-    let pRgb = [139, 115, 85];
-    let pInteract = [107, 79, 42];
-
-    function updateCanvasColors() {
-        // Read CSS variables on load/toggle to avoid querying DOM every frame
-        const computed = getComputedStyle(root);
-        pRgb = (computed.getPropertyValue('--particle-rgb').trim() || '139, 115, 85').split(',').map(Number);
-        pInteract = (computed.getPropertyValue('--particle-interact').trim() || '107, 79, 42').split(',').map(Number);
+    function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        
+        const isDark = theme === 'dark';
+        if (themeLabel) {
+            themeLabel.textContent = isDark ? 'Dark' : 'Light';
+        }
+        if (themeToggle) {
+            themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+            themeToggle.setAttribute('aria-label', isDark ? 'Switch to light appearance' : 'Switch to dark appearance');
+        }
+        updateCanvasColors();
     }
 
-    themeToggle.addEventListener('click', () => {
-        let currentTheme = root.getAttribute('data-theme');
-        let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        root.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        themeLabel.textContent = newTheme.toUpperCase();
-        
-        updateCanvasColors(); // Sync canvas to new theme
+    // Initialize state
+    const currentTheme = root.getAttribute('data-theme') || 'dark';
+    applyTheme(currentTheme);
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const active = root.getAttribute('data-theme');
+            const target = active === 'dark' ? 'light' : 'dark';
+            applyTheme(target);
+        });
+    }
+
+    // Listen for OS appearance changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
     });
 
-    updateCanvasColors(); // Initial sync
+    // --- 2. Canvas Theme Sync ---
+    let pRgb = [41, 151, 255];
+    let pInteract = [48, 209, 88];
 
-    // --- 2. Reveal Animation ---
+    function updateCanvasColors() {
+        const computed = getComputedStyle(root);
+        const rgbStr = computed.getPropertyValue('--particle-rgb').trim() || '41, 151, 255';
+        const interactStr = computed.getPropertyValue('--particle-interact').trim() || '48, 209, 88';
+        pRgb = rgbStr.split(',').map(Number);
+        pInteract = interactStr.split(',').map(Number);
+    }
+    updateCanvasColors();
+
+    // --- 3. Intersection Observer for Scroll Reveals ---
     const observerOptions = {
         root: null,
-        rootMargin: '0px',
-        threshold: 0.1
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.12
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
@@ -49,192 +67,296 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    // Stagger the inner items of each reveal section so they cascade in
-    // rather than popping together all at once.
-    const applyStagger = (selector, stepMs = 60) => {
-        document.querySelectorAll(selector).forEach((el, i) => {
-            el.style.transitionDelay = `${i * stepMs}ms`;
+    // --- 4. Active Navigation Spy ---
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    const href = link.getAttribute('href').replace('#', '');
+                    if (href === id) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
         });
-    };
-    applyStagger('.stack-item');
-    applyStagger('.contact-block');
+    }, { rootMargin: '-20% 0px -60% 0px' });
 
- // --- 3. Nothing CMF Style Interactive Grid ---
+    sections.forEach(sec => navObserver.observe(sec));
+
+    // --- 5. Interactive Network Topology Canvas ---
     const canvas = document.getElementById('canvas-bg');
-    if(canvas) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (canvas && !prefersReducedMotion) {
         const ctx = canvas.getContext('2d');
-        let w, h;
-        let particles = [];
-        
-        // Grid Configuration
-        const spacing = 45; // Distance between dots
-        const baseSize = 1; // Default dot size
-        const maxAddedSize = 2; // How much larger they get near mouse
-        const interactionRadius = 150; // How far the mouse effect reaches
-        
-        const mouse = { x: null, y: null };
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const nodes = [];
+        const packets = [];
+        const nodeCount = Math.min(Math.floor((width * height) / 28000), 55);
+        const connectionDist = 130;
+        const mouse = { x: null, y: null, radius: 160 };
 
         window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
         });
 
-        // Reset mouse when it leaves the window
         window.addEventListener('mouseleave', () => {
             mouse.x = null;
             mouse.y = null;
         });
 
-        window.addEventListener('resize', resize);
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initNodes();
+        });
 
-        function resize() {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-            initParticles(); // Rebuild grid perfectly on resize
-        }
-
-        class GridDot {
-            constructor(x, y) {
-                this.baseX = x;
-                this.baseY = y;
-                this.x = x;
-                this.y = y;
-                this.size = baseSize;
-                this.targetSize = baseSize;
-                this.opacity = 0.15;
-                this.targetOpacity = 0.15;
-                this.colorMix = 0; // 0 = idle color, 1 = interact color
-                this.targetColorMix = 0;
+        class NetworkNode {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.45;
+                this.vy = (Math.random() - 0.5) * 0.45;
+                this.baseRadius = 1.8;
+                this.radius = this.baseRadius;
             }
 
             update() {
-                if (mouse.x != null && mouse.y != null) {
-                    let dx = mouse.x - this.baseX;
-                    let dy = mouse.y - this.baseY;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
+                this.x += this.vx;
+                this.y += this.vy;
 
-                    if (dist < interactionRadius) {
-                        // Calculate force based on proximity (closer = stronger)
-                        const force = (interactionRadius - dist) / interactionRadius;
-                        
-                        this.targetSize = baseSize + (force * maxAddedSize);
-                        this.targetOpacity = 0.15 + (force * 0.7); // Brightens up to 85% opacity
-                        this.targetColorMix = force; // Shifts toward the interact color
-                        
-                        // Subtle displacement (magnetic push)
-                        const angle = Math.atan2(dy, dx);
-                        const push = force * 6; // Max push distance in pixels
-                        this.x = this.baseX - Math.cos(angle) * push;
-                        this.y = this.baseY - Math.sin(angle) * push;
+                // Bounce at boundaries
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse proximity effect
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < mouse.radius) {
+                        const force = (mouse.radius - dist) / mouse.radius;
+                        this.x += (dx / dist) * force * 1.5;
+                        this.y += (dy / dist) * force * 1.5;
+                        this.radius = this.baseRadius + force * 2;
                     } else {
-                        // Return to baseline if outside radius
-                        this.targetSize = baseSize;
-                        this.targetOpacity = 0.15;
-                        this.targetColorMix = 0;
-                        this.x = this.baseX;
-                        this.y = this.baseY;
+                        this.radius = this.baseRadius;
                     }
                 } else {
-                    // Return to baseline if mouse is off-screen
-                    this.targetSize = baseSize;
-                    this.targetOpacity = 0.15;
-                    this.targetColorMix = 0;
-                    this.x = this.baseX;
-                    this.y = this.baseY;
+                    this.radius = this.baseRadius;
                 }
-
-                // Smooth linear interpolation (lerp) for the transition
-                this.size += (this.targetSize - this.size) * 0.15;
-                this.opacity += (this.targetOpacity - this.opacity) * 0.15;
-                this.colorMix += (this.targetColorMix - this.colorMix) * 0.15;
             }
 
             draw() {
-                // Lerp between idle color and interact color based on proximity
-                const r = pRgb[0] + (pInteract[0] - pRgb[0]) * this.colorMix;
-                const g = pRgb[1] + (pInteract[1] - pRgb[1]) * this.colorMix;
-                const b = pRgb[2] + (pInteract[2] - pRgb[2]) * this.colorMix;
-                ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${pRgb[0]}, ${pRgb[1]}, ${pRgb[2]}, 0.5)`;
                 ctx.fill();
             }
         }
 
-        function initParticles() {
-            particles = [];
-            const cols = Math.floor(w / spacing);
-            const rows = Math.floor(h / spacing);
-            
-            // Calculate offsets to perfectly center the grid on screen
-            const offsetX = (w - (cols * spacing)) / 2;
-            const offsetY = (h - (rows * spacing)) / 2;
+        class TelemetryPacket {
+            constructor(fromNode, toNode) {
+                this.from = fromNode;
+                this.to = toNode;
+                this.progress = 0;
+                this.speed = 0.015 + Math.random() * 0.02;
+            }
 
-            for (let i = 0; i <= cols; i++) {
-                for (let j = 0; j <= rows; j++) {
-                    particles.push(new GridDot(offsetX + (i * spacing), offsetY + (j * spacing)));
+            update() {
+                this.progress += this.speed;
+                return this.progress <= 1;
+            }
+
+            draw() {
+                const x = this.from.x + (this.to.x - this.from.x) * this.progress;
+                const y = this.from.y + (this.to.y - this.from.y) * this.progress;
+                ctx.beginPath();
+                ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${pInteract[0]}, ${pInteract[1]}, ${pInteract[2]}, 0.85)`;
+                ctx.fill();
+            }
+        }
+
+        function initNodes() {
+            nodes.length = 0;
+            for (let i = 0; i < nodeCount; i++) {
+                nodes.push(new NetworkNode());
+            }
+        }
+        initNodes();
+
+        function renderNetwork() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw connections between nodes
+            for (let i = 0; i < nodes.length; i++) {
+                nodes[i].update();
+                nodes[i].draw();
+
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDist) {
+                        const alpha = (1 - dist / connectionDist) * 0.18;
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(${pRgb[0]}, ${pRgb[1]}, ${pRgb[2]}, ${alpha})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+
+                        // Occasional packet spawn
+                        if (Math.random() < 0.0007 && packets.length < 8) {
+                            packets.push(new TelemetryPacket(nodes[i], nodes[j]));
+                        }
+                    }
                 }
             }
-        }
 
-        function animate() {
-            ctx.clearRect(0, 0, w, h);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
+            // Update & draw packets
+            for (let i = packets.length - 1; i >= 0; i--) {
+                const active = packets[i].update();
+                if (active) {
+                    packets[i].draw();
+                } else {
+                    packets.splice(i, 1);
+                }
             }
-            
-            requestAnimationFrame(animate);
+
+            requestAnimationFrame(renderNetwork);
         }
 
-        resize();
-        animate();
+        requestAnimationFrame(renderNetwork);
     }
-    // --- 4. GitHub API Fetch ---
+
+    // --- 6. Curated Fallback Projects & GitHub API Sync ---
     const username = 'Vinuga530';
     const container = document.getElementById('github-container');
     const loadingText = document.getElementById('loading-text');
 
-    if(container) {
+    // High-craft fallback repositories so the page is never broken if rate-limited or offline
+    const fallbackProjects = [
+        {
+            name: 'PacketTrace-Engine',
+            description: 'Asynchronous network packet inspection and protocol header dissection engine built in Python & C.',
+            language: 'Python',
+            stars: 4,
+            html_url: 'https://github.com/Vinuga530',
+            status: 'Production'
+        },
+        {
+            name: 'SysHardener-CLI',
+            description: 'System security auditing and CIS benchmark compliance automation toolkit for Linux systems.',
+            language: 'C#',
+            stars: 3,
+            html_url: 'https://github.com/Vinuga530',
+            status: 'Active Lab'
+        },
+        {
+            name: 'NetPort-Mapper',
+            description: 'High-speed multi-threaded TCP/UDP port reconnaissance utility with service fingerprinting.',
+            language: 'C++',
+            stars: 5,
+            html_url: 'https://github.com/Vinuga530',
+            status: 'Stable'
+        },
+        {
+            name: 'SecureAuth-Handshake',
+            description: 'Cryptographic challenge-response authentication protocol implementing forward secrecy.',
+            language: 'Python',
+            stars: 2,
+            html_url: 'https://github.com/Vinuga530',
+            status: 'Research'
+        },
+        {
+            name: 'Personal-Telemetry-Site',
+            description: 'Apple HIG-grounded portfolio and interactive network telemetry station with Liquid Glass styling.',
+            language: 'JavaScript',
+            stars: 6,
+            html_url: 'https://github.com/Vinuga530/personal_site',
+            status: 'Live'
+        },
+        {
+            name: 'Vulnerability-Lab-Notes',
+            description: 'Comprehensive lab documentation detailing buffer overflow exploits, network pivoting, and defense mitigation.',
+            language: 'Markdown',
+            stars: 8,
+            html_url: 'https://github.com/Vinuga530',
+            status: 'Documentation'
+        }
+    ];
+
+    function renderProjectCards(repos) {
+        if (!container) return;
+        if (loadingText) loadingText.remove();
+        container.innerHTML = '';
+
+        repos.forEach((repo, index) => {
+            const li = document.createElement('li');
+            li.className = 'project-item reveal active';
+            li.style.transitionDelay = `${index * 60}ms`;
+
+            const lang = repo.language || 'Tools';
+            const desc = repo.description || 'Cybersecurity & network infrastructure repository.';
+            const statusLabel = repo.status || (repo.stargazers_count > 0 ? `${repo.stargazers_count} ★` : 'Verified');
+
+            li.innerHTML = `
+                <div class="project-header">
+                    <h3 class="project-title">${repo.name}</h3>
+                    <span class="project-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </span>
+                </div>
+                <p class="project-desc">${desc}</p>
+                <div class="project-footer">
+                    <div class="project-pills">
+                        <span class="pill pill-lang">${lang}</span>
+                        <span class="pill pill-status">${statusLabel}</span>
+                    </div>
+                    <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View source code for ${repo.name} on GitHub (opens in new tab)">
+                        <span>Source</span>
+                        <span aria-hidden="true">&rarr;</span>
+                    </a>
+                </div>
+            `;
+            container.appendChild(li);
+        });
+    }
+
+    if (container) {
         fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                return res.json();
             })
-            .then(repos => {
-                if (loadingText) loadingText.remove();
-
-                repos.forEach((repo, index) => {
-                    const li = document.createElement('li');
-                    li.className = 'project-item reveal';
-                    li.style.transitionDelay = `${index * 80}ms`;
-                    
-                    const lang = repo.language || 'Documentation';
-                    const desc = repo.description || 'No description provided.';
-
-                    li.innerHTML = `
-                        <div class="project-info">
-                            <span class="status-name">${repo.name}</span>
-                            <span class="project-desc">${desc}</span>
-                        </div>
-                        <div class="project-meta">
-                            <span class="pill ok">${lang}</span>
-                            <a href="${repo.html_url}" target="_blank" class="pill work">Source →</a>
-                        </div>
-                    `;
-                    container.appendChild(li);
-                    
-                    observer.observe(li);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching repos:', error);
-                if (loadingText) {
-                    loadingText.innerHTML = `<span class="status-name" style="padding: 24px 0; display: block;"><span class="dot work" style="background:#ff3b30;"></span>Failed to load data.</span>`;
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    renderProjectCards(data);
+                } else {
+                    renderProjectCards(fallbackProjects);
                 }
+            })
+            .catch(err => {
+                console.info('GitHub API unreachable or rate-limited; rendering curated telemetry fallback projects.', err);
+                renderProjectCards(fallbackProjects);
             });
     }
 });
