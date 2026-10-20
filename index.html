@@ -1,126 +1,220 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');</script>
-<meta name="description" content="Cybersecurity & networking student. Gamer, tech tinkerer, chasing self-improvement. Always leveling up."/>
-<title>VinugaK | Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vinuga K — Cybersecurity &amp; Networking</title>
+  <meta name="description" content="Personal portfolio of Vinuga K — Cybersecurity and networking student, gamer, tinkerer." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Vinuga K — Cybersecurity &amp; Networking" />
+  <meta property="og:description" content="Personal portfolio of Vinuga K — Cybersecurity and networking student, gamer, tinkerer." />
+  <meta property="og:type" content="website" />
+
+  <!-- Theme color (system preference) -->
+  <meta name="theme-color" content="#ECEEEA" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#14181A" media="(prefers-color-scheme: dark)" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body id="top">
 
-<div class="noise"></div>
-<canvas id="canvas-bg"></canvas>
+  <a href="#main" class="skip-link">Skip to main content</a>
 
-<header>
-  <div class="logo">Vinuga_K</div>
-  <nav class="nav-links">
-    <a href="#about">About</a>
-    <a href="#stack">Stack</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
-  </nav>
-  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-    [ THEME: <span id="theme-label">LIGHT</span> ]
-  </button>
-</header>
+  <header class="panel-header">
+    <div class="header-content">
+      <a href="#top" class="panel-logo" aria-label="Vinuga K home">Vinuga_K</a>
 
-<main>
-  <section class="section" id="home">
-    <div class="eyebrow">$ whoami</div>
-    <h1>
-      Cybersecurity student,<br class="hero-break">
-      <em>gamer</em>, tinkerer,<br class="hero-break">
-    </h1>
-    <p class="desc">
-      I like taking things apart to see how they actually work — networks, systems, security, whatever's in front of me. Most of what I know I picked up by breaking something first and figuring out why.
-    </p>
-  </section>
-
-  <section class="section reveal" id="stack">
-    <div class="eyebrow">Technical Arsenal</div>
-    <div class="stack-grid">
-      <div class="stack-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" />
-        <span>Python</span>
-      </div>
-      <div class="stack-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" />
-        <span>C#</span>
-      </div>
-      <div class="stack-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" />
-        <span>C++</span>
-      </div>
-      <div class="stack-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" />
-        <span>PHP</span>
-      </div>
-      <div class="stack-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" />
-        <span>HTML5</span>
-      </div>
-      <div class="stack-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" />
-        <span>CSS3</span>
-      </div>
-      <div class="stack-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" />
-        <span>JavaScript</span>
-      </div>
+      <!-- Network Engineer Patch Panel Port Row -->
+      <nav class="port-nav" aria-label="Patch panel port navigation">
+        <ul class="port-list" role="list">
+          <li>
+            <a href="#about" class="port-item" data-port="about">
+              <span class="port-led" aria-hidden="true"></span>
+              <span class="port-label">PORT 01 // ABOUT</span>
+            </a>
+          </li>
+          <li>
+            <a href="#projects" class="port-item" data-port="projects">
+              <span class="port-led" aria-hidden="true"></span>
+              <span class="port-label">PORT 02 // PROJECTS</span>
+            </a>
+          </li>
+          <li>
+            <a href="#stack" class="port-item" data-port="stack">
+              <span class="port-led" aria-hidden="true"></span>
+              <span class="port-label">PORT 03 // STACK</span>
+            </a>
+          </li>
+          <li>
+            <a href="#contact" class="port-item" data-port="contact">
+              <span class="port-led" aria-hidden="true"></span>
+              <span class="port-label">PORT 04 // CONTACT</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
-  </section>
+  </header>
 
-  <section class="section reveal" id="projects">
-    <div class="eyebrow">Live Feed</div>
-    <h2 class="sub-heading" style="margin-bottom: 32px;">Featured Repositories</h2>
-    
-    <ul class="status-list" id="github-container">
-      <li class="status-item" id="loading-text">
-        <span class="status-name" style="padding: 24px 0; display: block;"><span class="dot work"></span>Fetching secure data from GitHub...</span>
-      </li>
-    </ul>
-  </section>
+  <main id="main" class="column-layout">
 
-  <section class="section reveal" id="about">
-    <div class="eyebrow">Profile</div>
-    <h2 class="sub-heading">
-      Cybersecurity & networking student who'd rather break things in a lab than read about them in a textbook.
-    </h2>
-    <p class="desc" style="max-width: 600px;">
-      I spend most of my time in networks and systems, picking apart how things get attacked so I can learn how to defend them properly. Outside of that, I'm probably gaming, tinkering with a side project, or down a rabbit hole about whatever new tool just dropped. No grand mission statement here — just someone who likes getting better at this, one skill at a time.
-    </p>
-  </section>
+    <!-- About Section -->
+    <section id="about" class="panel-section">
+      <div class="section-tag">[LABEL: PORT_01 // SEC_ABOUT]</div>
+      <h1>Cybersecurity student, gamer, tinkerer.</h1>
 
-  <section class="section reveal" id="contact">
-    <div class="eyebrow">Comm Link</div>
-    <h2 class="sub-heading" style="margin-bottom: 32px;">Let's Connect</h2>
-    <div class="contact-grid">
-      <div class="contact-block">
-        <span class="contact-label">GitHub</span>
-        <a href="https://github.com/Vinuga530" target="_blank" class="contact-value">@Vinuga530</a>
+      <div class="meta-block">
+        <p class="meta-row">
+          <span class="meta-key">CURRENT_STATUS:</span>
+          <span class="meta-val">[FILL IN: Current university / role / student status]</span>
+        </p>
+        <p class="meta-row">
+          <span class="meta-key">CURRICULUM_VITAE:</span>
+          <span class="meta-val"><a href="[FILL IN: URL or path to CV file]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: Link to CV / Resume]</a></span>
+        </p>
       </div>
-      <div class="contact-block">
-        <span class="contact-label">Instagram</span>
-        <a href="https://instagram.com/vinuga.jpg" target="_blank" class="contact-value">@vinuga.jpg</a>
-      </div>
-      <div class="contact-block">
-        <span class="contact-label">Email</span>
-        <a href="mailto:vkisath2@gmail.com" class="contact-value">Reach Out</a>
-      </div>
-    </div>
-  </section>
-</main>
 
-<footer>
-  <span>© 2026 VinugaK. All rights reserved.</span>
-  <span>Based in Sri Lanka.</span>
-</footer>
+      <div class="text-body">
+        <p>
+          I like taking things apart to see how they actually work — networks, systems, security, whatever's in front of me. Most of what I know I picked up by breaking something first and figuring out why.
+        </p>
+        <p>
+          I spend most of my time in networks and systems, picking apart how things get attacked so I can learn how to defend them properly. Outside of that, I'm probably gaming, tinkering with a side project, or down a rabbit hole about whatever new tool just dropped. No grand mission statement here — just someone who likes getting better at this, one skill at a time.
+        </p>
+      </div>
+    </section>
 
-<script src="script.js"></script>
+    <!-- Projects Section -->
+    <section id="projects" class="panel-section">
+      <div class="section-tag">[LABEL: PORT_02 // SEC_PROJECTS]</div>
+      <h2>Projects</h2>
+
+      <div class="projects-list">
+        <article class="project-entry">
+          <h3 class="project-name">[FILL IN: Project Title 1]</h3>
+          <dl class="project-specs">
+            <div class="spec-row">
+              <dt>Problem:</dt>
+              <dd>[FILL IN: The network, security, or systems problem addressed]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>What I built:</dt>
+              <dd>[FILL IN: What was designed and implemented, tools/languages used]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>What I learned:</dt>
+              <dd>[FILL IN: Concrete technical takeaway or protocol behavior discovered]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>Link:</dt>
+              <dd><a href="[FILL IN: Project URL]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: View Repository / Demo]</a></dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="project-entry">
+          <h3 class="project-name">[FILL IN: Project Title 2]</h3>
+          <dl class="project-specs">
+            <div class="spec-row">
+              <dt>Problem:</dt>
+              <dd>[FILL IN: The network, security, or systems problem addressed]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>What I built:</dt>
+              <dd>[FILL IN: What was designed and implemented, tools/languages used]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>What I learned:</dt>
+              <dd>[FILL IN: Concrete technical takeaway or protocol behavior discovered]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>Link:</dt>
+              <dd><a href="[FILL IN: Project URL]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: View Repository / Demo]</a></dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="project-entry">
+          <h3 class="project-name">[FILL IN: Project Title 3]</h3>
+          <dl class="project-specs">
+            <div class="spec-row">
+              <dt>Problem:</dt>
+              <dd>[FILL IN: The network, security, or systems problem addressed]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>What I built:</dt>
+              <dd>[FILL IN: What was designed and implemented, tools/languages used]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>What I learned:</dt>
+              <dd>[FILL IN: Concrete technical takeaway or protocol behavior discovered]</dd>
+            </div>
+            <div class="spec-row">
+              <dt>Link:</dt>
+              <dd><a href="[FILL IN: Project URL]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: View Repository / Demo]</a></dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <!-- Stack Section -->
+    <section id="stack" class="panel-section">
+      <div class="section-tag">[LABEL: PORT_03 // SEC_STACK]</div>
+      <h2>Stack</h2>
+
+      <div class="stack-block">
+        <ul class="mono-list" role="list">
+          <li>Python</li>
+          <li>C#</li>
+          <li>C++</li>
+          <li>PHP</li>
+          <li>JavaScript</li>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li class="fill-row">
+            <span class="meta-key">NETWORKING &amp; SECURITY:</span>
+            <span>[FILL IN: e.g. Wireshark, nmap, Linux administration, packet analysis tools]</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="panel-section">
+      <div class="section-tag">[LABEL: PORT_04 // SEC_CONTACT]</div>
+      <h2>Contact</h2>
+
+      <div class="contact-block">
+        <ul class="contact-list" role="list">
+          <li>
+            <span class="contact-channel">EMAIL:</span>
+            <a href="mailto:vkisath2@gmail.com" class="link">vkisath2@gmail.com</a>
+          </li>
+          <li>
+            <span class="contact-channel">GITHUB:</span>
+            <a href="https://github.com/Vinuga530" class="link" target="_blank" rel="noopener noreferrer">@Vinuga530</a>
+          </li>
+          <li>
+            <span class="contact-channel">LINKEDIN:</span>
+            <a href="https://www.linkedin.com/in/vinugakisath/" class="link" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/vinugakisath/</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="panel-footer">
+    <p>&copy; 2026 VinugaK. Based in Sri Lanka.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

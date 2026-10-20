@@ -1,88 +1,35 @@
-# VinugaK — Minimal Cybersecurity Portfolio
+# VinugaK — Personal Portfolio
 
-A clean, minimal, and modern personal portfolio built with **vanilla HTML, CSS, and JavaScript**. Designed to be fast, readable, and calm — with subtle motion and an interactive background that reacts to user input.
+A personal portfolio site for a cybersecurity and networking student, styled after a network engineer's patch panel and cable labels.
 
-> **Philosophy:** quiet confidence, clean execution, zero clutter.
-
----
-
-## ✨ Features
-
-- Ultra-minimal black UI with high contrast
-- Subtle blur-to-focus text animations
-- Mouse-reactive particle background (lightweight)
-- Responsive layout (desktop-first, mobile-safe)
-- No frameworks, no dependencies
-- Fast load, easy to deploy
+Built with vanilla HTML, CSS, and JavaScript. No build step, no dependencies, no frameworks.
 
 ---
 
-## 🛠️ Tech Stack
+## Architecture & Design Direction
 
-- **HTML5** — semantic structure
-- **CSS3** — modern layout, motion, typography
-- **Vanilla JavaScript** — animations & interactivity
-
-No libraries. No frameworks. Full control.
+- **Visual Concept:** Network engineer's patch panel ports and cable labels.
+- **Typography:** Bricolage Grotesque (headings & body), IBM Plex Mono (metadata, ports, labels).
+- **Color System:** Surface, content, muted, accent, and signal tokens matching system `prefers-color-scheme` (light and dark).
+- **Navigation:** Sequential patch panel port row with LED indicators driven by a single `IntersectionObserver`.
+- **Accessibility:** 44px minimum target sizes, visible focus rings, semantic structure, responsive down to 320px width, full functionality without JavaScript.
 
 ---
 
-## 📂 Project Structure
+## File Structure
 
-```
+```text
 .
-├── index.html        # Main markup
-├── style.css         # Styling & animations
-├── script.js         # Background + motion logic
+├── index.html        # Semantic document structure and content
+├── styles.css        # Token palette, layout, and component styling
+├── script.js         # Port LED sequence on load and active observer
 ├── favicon.ico       # Favicon
-├── favicon-32x32.png
-├── favicon-16x16.png
-└── README.md
+├── LICENSE           # License terms
+└── README.md         # Repository documentation
 ```
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
-This site is optimized for **Vercel**, but works on any static host.
-
-### Deploy on Vercel
-1. Push the repository to GitHub
-2. Go to https://vercel.com
-3. Import the repository
-4. Deploy (no build configuration needed)
-
-Done.
-
----
-
-## 🎨 Design Notes
-
-- Motion is intentionally subtle — no flashy effects
-- Typography prioritizes readability and spacing
-- Animation supports content, not distraction
-- Empty or unfinished sections are hidden by design
-
-Minimalism here is **intentional**, not empty.
-
----
-
-## 📌 Status
-
-This portfolio is a **living project**.
-
-- Content and profiles are added progressively
-- Design may evolve, but restraint remains
-
----
-
-## 📫 Contact
-
-For collaboration or professional inquiries:
-
-- Email: vkisath2@gmail.com
-- GitHub / LinkedIn: https://www.linkedin.com/in/vinugakisath/
-
----
-
-© 2026 VinugaK. All rights reserved.
+This site contains only static files (`index.html`, `styles.css`, `script.js`, `favicon.ico`). It can be hosted on any static file server or hosting provider by serving the repository root.
