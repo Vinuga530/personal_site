@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+import { site, ports } from '../data/config';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>{site.title}</title>
+  <meta name="description" content={site.description} />
+  <link rel="canonical" href={site.url} />
+  <meta name="color-scheme" content="light dark" />
+  <meta property="og:title" content={site.title} />
+  <meta property="og:description" content={site.description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={site.url} />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#ECEEEA" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#14181A" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body id="top">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="panel-header"><div class="wrap"><a href="#top" class="panel-logo" aria-label="Vinuga K home">Vinuga_K</a></div></header>
+  <nav class="port-bar" aria-label="Sections">
+    <div class="wrap">
+      <ul class="port-list" role="list">
+        {ports.map((p, i) => (
+          <li><a href={`#${p.id}`} class="port-item" data-port={p.id}>
+            <span class="port-top"><span class="port-num">{String(i + 1).padStart(2, '0')}</span><span class="port-led" aria-hidden="true"></span></span>
+            <span class="port-label">{p.label}</span>
+          </a></li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+  <main id="main" class="wrap"><slot /></main>
+  <footer class="panel-footer"><div class="wrap"><p>&copy; 2026 VinugaK. Based in Sri Lanka.</p></div></footer>
+  <script>
+    const ports = document.querySelectorAll<HTMLAnchorElement>('.port-item');
+    const sections = document.querySelectorAll<HTMLElement>('.panel-section');
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const step = 400 / ports.length;
+      ports.forEach((port, i) => setTimeout(() => {
+        port.classList.add('flash-sequence');
+        setTimeout(() => port.classList.remove('flash-sequence'), 400);
+      }, i * step));
+    }
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        for (const port of ports) {
+          const on = port.dataset.port === entry.target.id;
+          port.classList.toggle('is-active', on);
+          if (on) port.setAttribute('aria-current', 'true'); else port.removeAttribute('aria-current');
+        }
+      }
+    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+    sections.forEach((s) => observer.observe(s));
+  </script>
+</body>
+</html>

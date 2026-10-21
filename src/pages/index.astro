@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { projects, stack, contacts } from '../data/config';
+---
+<Base>
+  <section id="about" class="panel-section hero">
+    <h1>Cybersecurity student, gamer, tinkerer.</h1>
+    <p class="link-status">
+      <span class="status-led" aria-hidden="true"></span>
+      <span class="status-key">Link up</span>
+      <span class="status-detail">ICBT Higher Diploma in Network Technology &amp; Cyber Security. IT intern at Powernet.</span>
+    </p>
+    <div class="text-body">
+      <p>I like taking things apart to see how they actually work — networks, systems, security, whatever's in front of me. Most of what I know I picked up by breaking something first and figuring out why.</p>
+      <p>I spend most of my time in networks and systems, picking apart how things get attacked so I can learn how to defend them properly. Outside of that, I'm probably gaming, tinkering with a side project, or down a rabbit hole about whatever new tool just dropped. No grand mission statement here — just someone who likes getting better at this, one skill at a time.</p>
+    </div>
+  </section>
+  <section id="projects" class="panel-section">
+    <h2>Projects</h2>
+    <div class="section-body">
+      {projects.map((p) => (
+        <article class="project"><h3>{p.title}</h3><p>{p.text}</p><p class="project-meta">{p.meta}</p></article>
+      ))}
+    </div>
+  </section>
+  <section id="stack" class="panel-section">
+    <h2>Stack</h2>
+    <div class="section-body"><dl class="stack-list">
+      {stack.map((s) => (<div class="stack-row"><dt>{s.key}</dt><dd>{s.value}</dd></div>))}
+    </dl></div>
+  </section>
+  <section id="contact" class="panel-section">
+    <h2>Contact</h2>
+    <div class="section-body"><ul class="contact-list" role="list">
+      {contacts.map((c) => (
+        <li>
+          <span class="contact-channel">{c.channel}</span>
+          <a href={c.href} class="link icon-text" target={c.external ? '_blank' : undefined} rel={c.external ? 'noopener noreferrer' : undefined}>
+            <Icon name={c.icon} size={20} />{c.label}
+            {c.external && <Icon name="icon-navigation-external-link" size={16} />}
+          </a>
+        </li>
+      ))}
+    </ul></div>
+  </section>
+</Base>
