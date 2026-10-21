@@ -1,44 +1,52 @@
 /* ==========================================================================
-   Design Tokens & System Configuration
-   Theme: Network Engineer's Patch Panel & Cable Labels
+   Tokens — Network engineer's patch panel
+   Contrast on --surface (computed): light content 13.8, muted 5.6, accent 5.4,
+   signal 4.6 / dark content 14.3, muted 7.3, accent 8.6, signal 7.2
    ========================================================================== */
 
 :root {
+  color-scheme: light dark;
+
   --surface: #ECEEEA;
+  --panel: #E2E6E1;
   --content: #1B2224;
   --muted: #52605F;
   --accent: #0B6A78;
   --signal: #B4491F;
   --signal-off: rgba(82, 96, 95, 0.35);
+  --rule: rgba(82, 96, 95, 0.4);
 
   --font-sans: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'IBM Plex Mono', Menlo, Consolas, monospace;
 
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 16px;
-  --space-4: 24px;
-  --space-5: 32px;
-  --space-6: 48px;
-  --space-7: 64px;
-  --space-8: 80px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4rem;
 
-  --max-content-width: 65ch;
+  --wrap-width: 60rem;
+  --wrap-pad: clamp(1rem, 5vw, 3rem);
+  --text-width: 65ch;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --surface: #14181A;
+    --panel: #1B2124;
     --content: #E3E7E4;
     --muted: #9AA8A6;
     --accent: #4FC3D1;
     --signal: #F08A5D;
     --signal-off: rgba(154, 168, 166, 0.25);
+    --rule: rgba(154, 168, 166, 0.35);
   }
 }
 
 /* ==========================================================================
-   Base & Reset
+   Base
    ========================================================================== */
 
 *, *::before, *::after {
@@ -49,36 +57,41 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 18px;
+  /* 112.5% = 18px at the browser default, and follows the reader's text-size setting */
+  font-size: 112.5%;
   -webkit-text-size-adjust: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
 }
 
 body {
   background-color: var(--surface);
   color: var(--content);
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: 1rem;
   line-height: 1.6;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Accessibility: Keyboard Skip Link */
+.wrap {
+  width: 100%;
+  max-width: var(--wrap-width);
+  margin-inline: auto;
+  padding-inline: var(--wrap-pad);
+}
+
 .skip-link {
   position: absolute;
-  top: -80px;
+  top: -5rem;
   left: var(--space-4);
   background: var(--content);
   color: var(--surface);
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 0.8125rem;
   font-weight: 500;
   padding: var(--space-2) var(--space-3);
   text-decoration: none;
@@ -100,161 +113,132 @@ body {
    ========================================================================== */
 
 h1 {
-  font-family: var(--font-sans);
-  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-size: clamp(2.25rem, 7vw, 3.75rem);
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  color: var(--content);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
   margin-bottom: var(--space-4);
 }
 
 h2 {
-  font-family: var(--font-sans);
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.015em;
-  color: var(--content);
-  margin-bottom: var(--space-4);
 }
 
 h3 {
-  font-family: var(--font-sans);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.35;
-  color: var(--content);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
 p {
-  max-width: var(--max-content-width);
+  max-width: var(--text-width);
   margin-bottom: var(--space-3);
 }
 
-.text-link,
 .link {
+  display: inline-block;
+  padding-block: 0.6rem;
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
 }
-.text-link:hover,
-.link:hover {
-  color: var(--content);
-}
-
-/* Metadata and Cable Labels */
-.section-tag {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: var(--space-2);
-}
-
-.meta-key {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-  margin-right: var(--space-2);
-}
-
-.meta-val {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--content);
-}
+.link:hover { color: var(--content); }
 
 /* ==========================================================================
-   Header & Signature Patch Panel Ports Nav
+   Header and the patch panel bar (the signature)
    ========================================================================== */
 
 .panel-header {
-  padding: var(--space-5) clamp(var(--space-4), 6vw, var(--space-7));
-  border-bottom: 1px solid var(--muted);
-}
-
-.header-content {
-  max-width: var(--max-content-width);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 .panel-logo {
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   color: var(--content);
   text-decoration: none;
-  width: fit-content;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+  margin-top: var(--space-2);
 }
-.panel-logo:hover {
-  color: var(--accent);
-}
+.panel-logo:hover { color: var(--accent); }
 
-/* The signature row of patch panel ports */
-.port-nav {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.port-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--rule);
+  padding-block: var(--space-2);
+  padding-top: calc(var(--space-2) + env(safe-area-inset-top, 0px));
 }
 
 .port-list {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
 }
 
 .port-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 3.25rem;
+  padding: var(--space-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--panel);
   font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
+  font-size: 0.8125rem;
   color: var(--muted);
   text-decoration: none;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  white-space: nowrap;
 }
 .port-item:hover {
   color: var(--content);
+  border-color: var(--muted);
 }
 
-/* Signal LED Indicator */
+.port-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.port-num {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
 .port-led {
-  width: 8px;
-  height: 8px;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 50%;
   background-color: var(--signal-off);
-  flex-shrink: 0;
-  display: inline-block;
   transition: background-color 0.2s linear;
 }
 
-/* Active LED state driven by IntersectionObserver */
-.port-item.is-active .port-led {
-  background-color: var(--signal);
-}
+/* Active section: lit LED, bold label, accent border (never colour alone) */
 .port-item.is-active {
   color: var(--content);
   font-weight: 600;
+  border-color: var(--accent);
+}
+.port-item.is-active .port-led {
+  background-color: var(--signal);
 }
 
-/* Startup sequence LED flash (400ms total, ease-out) */
+/* Startup sequence: LEDs flash once in order */
 @media (prefers-reduced-motion: no-preference) {
   .port-item.flash-sequence .port-led {
     animation: portPulse 400ms ease-out;
@@ -262,148 +246,152 @@ p {
 }
 
 @keyframes portPulse {
-  0% {
-    background-color: var(--signal-off);
-  }
-  50% {
-    background-color: var(--signal);
-  }
-  100% {
-    background-color: var(--signal-off);
-  }
+  0%   { background-color: var(--signal-off); }
+  50%  { background-color: var(--signal); }
+  100% { background-color: var(--signal-off); }
 }
 
 /* ==========================================================================
-   Layout & Sections
+   Sections
    ========================================================================== */
 
-.column-layout {
+main {
   flex: 1;
-  max-width: var(--max-content-width);
-  margin-left: clamp(var(--space-4), 6vw, var(--space-7));
-  margin-right: var(--space-4);
-  padding-bottom: var(--space-8);
 }
 
 .panel-section {
-  scroll-margin-top: var(--space-6);
-  margin-top: var(--space-7);
+  scroll-margin-top: 5.5rem;
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--rule);
 }
 
-.meta-block {
-  margin-bottom: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+.hero {
+  border-top: 0;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-7);
 }
 
-.meta-row {
+/* Last section needs enough height for its LED to light at the end of the page */
+#contact {
+  min-height: 60svh;
+}
+
+.link-status {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--space-1);
-  margin-bottom: 0;
-}
-
-.text-body p:last-child {
-  margin-bottom: 0;
-}
-
-/* ==========================================================================
-   Projects Section (No boxes, pure informative specs)
-   ========================================================================== */
-
-.projects-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
-
-.project-entry {
-  display: flex;
-  flex-direction: column;
   gap: var(--space-2);
+  margin-bottom: var(--space-5);
 }
 
-.project-specs {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--space-1);
+.status-led {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--signal);
+  align-self: center;
 }
 
-.spec-row {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  align-items: baseline;
-  gap: var(--space-2);
-}
-
-.spec-row dt {
+.status-key {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--muted);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  color: var(--muted);
 }
 
-.spec-row dd {
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--content);
+.status-detail {
+  font-size: 1rem;
+}
+
+.text-body p:last-child { margin-bottom: 0; }
+
+/* Two-column sections: heading left, content right on wide screens */
+@media (min-width: 52rem) {
+  .panel-section:not(.hero) {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: var(--space-5);
+    align-items: start;
+  }
+  .hero .text-body { max-width: var(--text-width); }
+}
+
+h2 { margin-bottom: var(--space-4); }
+@media (min-width: 52rem) {
+  h2 { margin-bottom: 0; }
 }
 
 /* ==========================================================================
-   Stack Section
+   Projects
    ========================================================================== */
 
-.mono-list {
-  list-style: none;
+.project {
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--rule);
+}
+.project:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.project:last-child { padding-bottom: 0; }
+
+.project p { margin-bottom: var(--space-2); }
+
+.project-meta {
   font-family: var(--font-mono);
-  font-size: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: 0;
-}
-
-.mono-list li {
-  color: var(--content);
-}
-
-.fill-row {
-  margin-top: var(--space-2);
-  line-height: 1.5;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  margin-bottom: 0;
 }
 
 /* ==========================================================================
-   Contact Section
+   Stack
+   ========================================================================== */
+
+.stack-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.stack-row {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.stack-row dt,
+.contact-channel {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stack-row dd {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+}
+
+/* ==========================================================================
+   Contact
    ========================================================================== */
 
 .contact-list {
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: 0;
 }
 
 .contact-list li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2);
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
   min-height: 44px;
-}
-
-.contact-channel {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-  min-width: 90px;
 }
 
 /* ==========================================================================
@@ -411,20 +399,24 @@ p {
    ========================================================================== */
 
 .panel-footer {
-  padding: var(--space-5) clamp(var(--space-4), 6vw, var(--space-7));
-  border-top: 1px solid var(--muted);
+  padding-block: var(--space-5);
+  padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--rule);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--muted);
 }
+.panel-footer p { margin-bottom: 0; }
 
 /* ==========================================================================
-   Responsive Constraints & 320px Floor
+   Narrow screens (320px floor)
    ========================================================================== */
 
-@media (max-width: 580px) {
-  .spec-row {
+@media (max-width: 36rem) {
+  .stack-row,
+  .contact-list li {
     grid-template-columns: 1fr;
     gap: 2px;
   }
+  .port-item { padding: var(--space-2) 0.4rem; }
 }
