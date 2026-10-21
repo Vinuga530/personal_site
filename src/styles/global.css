@@ -424,3 +424,8 @@ h2 { margin-bottom: var(--space-4); }
 /* Icons: stroke 1.5, currentColor, sized by --icon-size */
 .icon { width: var(--icon-size, 1.5rem); height: var(--icon-size, 1.5rem); flex: none; }
 .icon-text { display: inline-flex; align-items: center; gap: var(--space-2); }
+
+.lede { font-size: 1.2rem; max-width: var(--text-width); }
+.cta { display: flex; gap: var(--space-5); }
+.sub { margin-top: var(--space-6); }
+.sub h2 { margin-bottom: var(--space-3); }

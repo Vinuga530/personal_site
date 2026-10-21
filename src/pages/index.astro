@@ -1,38 +1,52 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { projects, stack, contacts } from '../data/config';
+import { projects, skills, experience, education, focus, contacts } from '../data/config';
 ---
 <Base>
   <section id="about" class="panel-section hero">
-    <h1>Cybersecurity student, gamer, tinkerer.</h1>
+    <h1>Learning how networks work, and how they fail.</h1>
+    <p class="lede">I'm Vinuga Kisath, a network and cyber security student and IT intern in Sri Lanka.</p>
+    <p class="cta"><a class="link" href="#projects">View projects</a><a class="link" href="#contact">Get in touch</a></p>
     <p class="link-status">
       <span class="status-led" aria-hidden="true"></span>
       <span class="status-key">Link up</span>
       <span class="status-detail">ICBT Higher Diploma in Network Technology &amp; Cyber Security. IT intern at Powernet.</span>
     </p>
     <div class="text-body">
-      <p>I like taking things apart to see how they actually work — networks, systems, security, whatever's in front of me. Most of what I know I picked up by breaking something first and figuring out why.</p>
-      <p>I spend most of my time in networks and systems, picking apart how things get attacked so I can learn how to defend them properly. Outside of that, I'm probably gaming, tinkering with a side project, or down a rabbit hole about whatever new tool just dropped. No grand mission statement here — just someone who likes getting better at this, one skill at a time.</p>
+      <p>I'm studying how networks are built and how they get attacked, so I can help defend them. Most of my learning happens by setting something up, breaking it and working out why.</p>
+      <p>Alongside the diploma I work in IT at Powernet, which keeps the theory tied to real equipment and real requirements. I'm early in my career and still building depth in networking, firewalls, Linux and Python.</p>
+    </div>
+    <div class="sub">
+      <h2>Experience</h2>
+      <h3>{experience.role}, {experience.org}</h3>
+      <p>{experience.text}</p>
+    </div>
+    <div class="sub">
+      <h2>Education</h2>
+      <dl class="stack-list">{education.map((e) => (<div class="stack-row"><dt>{e.key}</dt><dd>{e.value}</dd></div>))}</dl>
     </div>
   </section>
   <section id="projects" class="panel-section">
     <h2>Projects</h2>
     <div class="section-body">
       {projects.map((p) => (
-        <article class="project"><h3>{p.title}</h3><p>{p.text}</p><p class="project-meta">{p.meta}</p></article>
+        <article class="project"><h3>{p.title}</h3><p>{p.text}</p><p class="project-meta">{p.meta}</p>{p.href && <p><a class="link" href={p.href} target="_blank" rel="noopener noreferrer">View repository</a></p>}</article>
       ))}
     </div>
   </section>
-  <section id="stack" class="panel-section">
-    <h2>Stack</h2>
-    <div class="section-body"><dl class="stack-list">
-      {stack.map((s) => (<div class="stack-row"><dt>{s.key}</dt><dd>{s.value}</dd></div>))}
-    </dl></div>
+  <section id="skills" class="panel-section">
+    <h2>Skills</h2>
+    <div class="section-body">
+      <dl class="stack-list">{skills.map((k) => (<div class="stack-row"><dt>{k.key}</dt><dd>{k.value}</dd></div>))}</dl>
+      <h3 class="sub">Current focus <span class="project-meta">Updated {focus.updated}</span></h3>
+      <p>{focus.items.join(', ')}.</p>
+    </div>
   </section>
   <section id="contact" class="panel-section">
     <h2>Contact</h2>
-    <div class="section-body"><ul class="contact-list" role="list">
+    <div class="section-body">
+      <p>Open to professional connections, collaboration and relevant opportunities in networking and security.</p><ul class="contact-list" role="list">
       {contacts.map((c) => (
         <li>
           <span class="contact-channel">{c.channel}</span>
