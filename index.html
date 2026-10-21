@@ -2,14 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Vinuga K — Cybersecurity &amp; Networking</title>
   <meta name="description" content="Personal portfolio of Vinuga K — Cybersecurity and networking student, gamer, tinkerer." />
+  <link rel="canonical" href="https://www.vinugakisath.site/" />
+  <meta name="color-scheme" content="light dark" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Vinuga K — Cybersecurity &amp; Networking" />
   <meta property="og:description" content="Personal portfolio of Vinuga K — Cybersecurity and networking student, gamer, tinkerer." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.vinugakisath.site/" />
+  <meta name="twitter:card" content="summary" />
 
   <!-- Theme color (system preference) -->
   <meta name="theme-color" content="#ECEEEA" media="(prefers-color-scheme: light)" />
@@ -27,58 +31,53 @@
   <a href="#main" class="skip-link">Skip to main content</a>
 
   <header class="panel-header">
-    <div class="header-content">
+    <div class="wrap">
       <a href="#top" class="panel-logo" aria-label="Vinuga K home">Vinuga_K</a>
-
-      <!-- Network Engineer Patch Panel Port Row -->
-      <nav class="port-nav" aria-label="Patch panel port navigation">
-        <ul class="port-list" role="list">
-          <li>
-            <a href="#about" class="port-item" data-port="about">
-              <span class="port-led" aria-hidden="true"></span>
-              <span class="port-label">PORT 01 // ABOUT</span>
-            </a>
-          </li>
-          <li>
-            <a href="#projects" class="port-item" data-port="projects">
-              <span class="port-led" aria-hidden="true"></span>
-              <span class="port-label">PORT 02 // PROJECTS</span>
-            </a>
-          </li>
-          <li>
-            <a href="#stack" class="port-item" data-port="stack">
-              <span class="port-led" aria-hidden="true"></span>
-              <span class="port-label">PORT 03 // STACK</span>
-            </a>
-          </li>
-          <li>
-            <a href="#contact" class="port-item" data-port="contact">
-              <span class="port-led" aria-hidden="true"></span>
-              <span class="port-label">PORT 04 // CONTACT</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
     </div>
   </header>
 
-  <main id="main" class="column-layout">
+  <!-- Signature: a patch panel of four ports. Lit LED = current section. -->
+  <nav class="port-bar" aria-label="Sections">
+    <div class="wrap">
+      <ul class="port-list" role="list">
+        <li>
+          <a href="#about" class="port-item" data-port="about">
+            <span class="port-top"><span class="port-num">01</span><span class="port-led" aria-hidden="true"></span></span>
+            <span class="port-label">About</span>
+          </a>
+        </li>
+        <li>
+          <a href="#projects" class="port-item" data-port="projects">
+            <span class="port-top"><span class="port-num">02</span><span class="port-led" aria-hidden="true"></span></span>
+            <span class="port-label">Projects</span>
+          </a>
+        </li>
+        <li>
+          <a href="#stack" class="port-item" data-port="stack">
+            <span class="port-top"><span class="port-num">03</span><span class="port-led" aria-hidden="true"></span></span>
+            <span class="port-label">Stack</span>
+          </a>
+        </li>
+        <li>
+          <a href="#contact" class="port-item" data-port="contact">
+            <span class="port-top"><span class="port-num">04</span><span class="port-led" aria-hidden="true"></span></span>
+            <span class="port-label">Contact</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-    <!-- About Section -->
-    <section id="about" class="panel-section">
-      <div class="section-tag">[LABEL: PORT_01 // SEC_ABOUT]</div>
+  <main id="main" class="wrap">
+
+    <section id="about" class="panel-section hero">
       <h1>Cybersecurity student, gamer, tinkerer.</h1>
 
-      <div class="meta-block">
-        <p class="meta-row">
-          <span class="meta-key">CURRENT_STATUS:</span>
-          <span class="meta-val">[FILL IN: Current university / role / student status]</span>
-        </p>
-        <p class="meta-row">
-          <span class="meta-key">CURRICULUM_VITAE:</span>
-          <span class="meta-val"><a href="[FILL IN: URL or path to CV file]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: Link to CV / Resume]</a></span>
-        </p>
-      </div>
+      <p class="link-status">
+        <span class="status-led" aria-hidden="true"></span>
+        <span class="status-key">Link up</span>
+        <span class="status-detail">ICBT Higher Diploma in Network Technology &amp; Cyber Security. IT intern at Powernet.</span>
+      </p>
 
       <div class="text-body">
         <p>
@@ -90,120 +89,60 @@
       </div>
     </section>
 
-    <!-- Projects Section -->
     <section id="projects" class="panel-section">
-      <div class="section-tag">[LABEL: PORT_02 // SEC_PROJECTS]</div>
       <h2>Projects</h2>
-
-      <div class="projects-list">
-        <article class="project-entry">
-          <h3 class="project-name">[FILL IN: Project Title 1]</h3>
-          <dl class="project-specs">
-            <div class="spec-row">
-              <dt>Problem:</dt>
-              <dd>[FILL IN: The network, security, or systems problem addressed]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>What I built:</dt>
-              <dd>[FILL IN: What was designed and implemented, tools/languages used]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>What I learned:</dt>
-              <dd>[FILL IN: Concrete technical takeaway or protocol behavior discovered]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>Link:</dt>
-              <dd><a href="[FILL IN: Project URL]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: View Repository / Demo]</a></dd>
-            </div>
-          </dl>
+      <div class="section-body">
+        <article class="project">
+          <h3>Powernet company website</h3>
+          <p>The website for Powernet (Pvt) Ltd, built with Astro and Keystatic, with a separate test deployment for checking changes before they go live.</p>
+          <p class="project-meta">Astro · Keystatic · GitHub</p>
         </article>
 
-        <article class="project-entry">
-          <h3 class="project-name">[FILL IN: Project Title 2]</h3>
-          <dl class="project-specs">
-            <div class="spec-row">
-              <dt>Problem:</dt>
-              <dd>[FILL IN: The network, security, or systems problem addressed]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>What I built:</dt>
-              <dd>[FILL IN: What was designed and implemented, tools/languages used]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>What I learned:</dt>
-              <dd>[FILL IN: Concrete technical takeaway or protocol behavior discovered]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>Link:</dt>
-              <dd><a href="[FILL IN: Project URL]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: View Repository / Demo]</a></dd>
-            </div>
-          </dl>
+        <article class="project">
+          <h3>Service Document Compiler</h3>
+          <p>A single-file HTML tool that exports service documents as A4 JPG images, with no install and no server.</p>
+          <p class="project-meta">HTML · CSS · JavaScript</p>
         </article>
 
-        <article class="project-entry">
-          <h3 class="project-name">[FILL IN: Project Title 3]</h3>
-          <dl class="project-specs">
-            <div class="spec-row">
-              <dt>Problem:</dt>
-              <dd>[FILL IN: The network, security, or systems problem addressed]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>What I built:</dt>
-              <dd>[FILL IN: What was designed and implemented, tools/languages used]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>What I learned:</dt>
-              <dd>[FILL IN: Concrete technical takeaway or protocol behavior discovered]</dd>
-            </div>
-            <div class="spec-row">
-              <dt>Link:</dt>
-              <dd><a href="[FILL IN: Project URL]" class="link" target="_blank" rel="noopener noreferrer">[FILL IN: View Repository / Demo]</a></dd>
-            </div>
-          </dl>
+        <article class="project">
+          <h3>IT department ticketing system</h3>
+          <p>A concept for a ticketing system that moves IT requests off the phone, to cut down a high call volume.</p>
+          <p class="project-meta">Concept</p>
         </article>
       </div>
     </section>
 
-    <!-- Stack Section -->
     <section id="stack" class="panel-section">
-      <div class="section-tag">[LABEL: PORT_03 // SEC_STACK]</div>
       <h2>Stack</h2>
-
-      <div class="stack-block">
-        <ul class="mono-list" role="list">
-          <li>Python</li>
-          <li>C#</li>
-          <li>C++</li>
-          <li>PHP</li>
-          <li>JavaScript</li>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li class="fill-row">
-            <span class="meta-key">NETWORKING &amp; SECURITY:</span>
-            <span>[FILL IN: e.g. Wireshark, nmap, Linux administration, packet analysis tools]</span>
-          </li>
-        </ul>
+      <div class="section-body">
+        <dl class="stack-list">
+          <div class="stack-row">
+            <dt>Languages</dt>
+            <dd>Python, C#, C++, PHP, JavaScript, HTML, CSS</dd>
+          </div>
+          <div class="stack-row">
+            <dt>Studying</dt>
+            <dd>CCNA, network technology, cyber security</dd>
+          </div>
+        </dl>
       </div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact" class="panel-section">
-      <div class="section-tag">[LABEL: PORT_04 // SEC_CONTACT]</div>
       <h2>Contact</h2>
-
-      <div class="contact-block">
+      <div class="section-body">
         <ul class="contact-list" role="list">
           <li>
-            <span class="contact-channel">EMAIL:</span>
+            <span class="contact-channel">Email</span>
             <a href="mailto:vkisath2@gmail.com" class="link">vkisath2@gmail.com</a>
           </li>
           <li>
-            <span class="contact-channel">GITHUB:</span>
+            <span class="contact-channel">GitHub</span>
             <a href="https://github.com/Vinuga530" class="link" target="_blank" rel="noopener noreferrer">@Vinuga530</a>
           </li>
           <li>
-            <span class="contact-channel">LINKEDIN:</span>
-            <a href="https://www.linkedin.com/in/vinugakisath/" class="link" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/vinugakisath/</a>
+            <span class="contact-channel">LinkedIn</span>
+            <a href="https://www.linkedin.com/in/vinugakisath/" class="link" target="_blank" rel="noopener noreferrer">linkedin.com/in/vinugakisath</a>
           </li>
         </ul>
       </div>
@@ -212,7 +151,9 @@
   </main>
 
   <footer class="panel-footer">
-    <p>&copy; 2026 VinugaK. Based in Sri Lanka.</p>
+    <div class="wrap">
+      <p>&copy; 2026 VinugaK. Based in Sri Lanka.</p>
+    </div>
   </footer>
 
   <script src="script.js"></script>
