@@ -1,0 +1,261 @@
+---
+import { labNotes } from '../data/config';
+import Icon from './Icon.astro';
+---
+
+<div class="lab-notes-container">
+  <div class="lab-notes-list">
+    {labNotes.map((note) => (
+      <article class="lab-note-card" id={note.id}>
+        <details class="note-details">
+          <summary class="note-summary">
+            <div class="note-meta-row">
+              <span class="note-num">{note.number}</span>
+              <span class="note-cat">{note.category}</span>
+              <span class="note-time">{note.readTime}</span>
+              <span class="note-date">{note.date}</span>
+            </div>
+            
+            <h3 class="note-title">{note.title}</h3>
+            <p class="note-excerpt">{note.summary}</p>
+
+            <div class="note-expand-cta">
+              <span class="expand-text">Read technical breakdown</span>
+              <Icon name="icon-chevron-right" size={16} />
+            </div>
+          </summary>
+
+          <div class="note-full-body">
+            <div class="note-content-text">
+              <p>{note.content}</p>
+            </div>
+
+            {note.codeSnippet && (
+              <div class="note-code-block">
+                <div class="code-header">
+                  <span class="code-lang-tag">{note.codeLang || 'terminal'}</span>
+                  <button type="button" class="copy-snippet-btn" data-snippet={note.codeSnippet} aria-label="Copy snippet to clipboard">
+                    <Icon name="icon-copy" size={14} />
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-pre"><code>{note.codeSnippet}</code></pre>
+              </div>
+            )}
+          </div>
+        </details>
+      </article>
+    ))}
+  </div>
+</div>
+
+<style>
+  .lab-notes-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .lab-notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .lab-note-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .lab-note-card:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+
+  .note-details {
+    width: 100%;
+  }
+
+  .note-summary {
+    list-style: none;
+    padding: var(--space-4) var(--space-5);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    user-select: none;
+  }
+
+  .note-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .note-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+  }
+
+  .note-num {
+    font-weight: 700;
+    color: var(--accent-cyan);
+    background: rgba(56, 189, 248, 0.1);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .note-cat {
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .note-time,
+  .note-date {
+    color: var(--text-muted);
+  }
+
+  .note-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  .note-excerpt {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 75ch;
+  }
+
+  .note-expand-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--accent-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: var(--space-2);
+    transition: transform 0.2s ease;
+  }
+
+  .note-details[open] .note-expand-cta {
+    display: none;
+  }
+
+  .note-full-body {
+    padding: 0 var(--space-5) var(--space-5) var(--space-5);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    animation: expandFade 0.2s ease-out;
+  }
+
+  @keyframes expandFade {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .note-content-text {
+    padding-top: var(--space-4);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  .note-content-text p {
+    margin: 0;
+    max-width: 75ch;
+  }
+
+  .note-code-block {
+    background: #080b0e;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-4);
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .code-lang-tag {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .copy-snippet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: transparent;
+    border: 0;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+
+  .copy-snippet-btn:hover {
+    color: var(--accent-cyan);
+  }
+
+  .code-pre {
+    padding: var(--space-4);
+    margin: 0;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: #e2e8f0;
+  }
+
+  @media (max-width: 48rem) {
+    .note-summary {
+      padding: var(--space-4);
+    }
+    .note-full-body {
+      padding: 0 var(--space-4) var(--space-4) var(--space-4);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.copy-snippet-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const snippet = btn.getAttribute('data-snippet');
+      if (snippet) {
+        navigator.clipboard.writeText(snippet).then(() => {
+          const span = btn.querySelector('span');
+          if (span) {
+            const original = span.textContent;
+            span.textContent = 'Copied!';
+            setTimeout(() => {
+              span.textContent = original;
+            }, 2000);
+          }
+        });
+      }
+    });
+  });
+</script>

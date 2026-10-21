@@ -1,65 +1,164 @@
 ---
 import '../styles/global.css';
-import { site, ports } from '../data/config';
+import { site, navSections } from '../data/config';
+import Icon from '../components/Icon.astro';
+import CommandPalette from '../components/CommandPalette.astro';
 ---
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  
   <title>{site.title}</title>
   <meta name="description" content={site.description} />
   <link rel="canonical" href={site.url} />
-  <meta name="color-scheme" content="light dark" />
+  <meta name="color-scheme" content="dark" />
+  
+  <!-- Open Graph -->
   <meta property="og:title" content={site.title} />
   <meta property="og:description" content={site.description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={site.url} />
   <meta name="twitter:card" content="summary" />
-  <meta name="theme-color" content="#ECEEEA" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#14181A" media="(prefers-color-scheme: dark)" />
+  <meta name="twitter:title" content={site.title} />
+  <meta name="twitter:description" content={site.description} />
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#07090c" />
   <link rel="icon" href="/favicon.ico" />
+  
+  <!-- Typography Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body id="top">
   <a href="#main" class="skip-link">Skip to main content</a>
-  <header class="panel-header"><div class="wrap"><a href="#top" class="panel-logo" aria-label="Vinuga K home">Vinuga_K</a></div></header>
-  <nav class="port-bar" aria-label="Sections">
-    <div class="wrap">
-      <ul class="port-list" role="list">
-        {ports.map((p, i) => (
-          <li><a href={`#${p.id}`} class="port-item" data-port={p.id}>
-            <span class="port-top"><span class="port-num">{String(i + 1).padStart(2, '0')}</span><span class="port-led" aria-hidden="true"></span></span>
-            <span class="port-label">{p.label}</span>
-          </a></li>
-        ))}
-      </ul>
+
+  <!-- Global Telemetry Status Ribbon -->
+  <div class="telemetry-bar">
+    <div class="wrap telemetry-inner">
+      <div class="telemetry-item">
+        <span class="telemetry-pulse" aria-hidden="true"></span>
+        <span>LINK UP</span>
+        <span class="telemetry-val">· 1000BASE-T Full Duplex</span>
+      </div>
+      <div class="telemetry-item">
+        <span>COLOMBO (UTC+5:30):</span>
+        <span class="telemetry-val" id="colombo-clock">--:--:--</span>
+      </div>
+      <div class="telemetry-item">
+        <span>STATUS:</span>
+        <span class="telemetry-val">IT Intern @ Powernet</span>
+      </div>
     </div>
-  </nav>
-  <main id="main" class="wrap"><slot /></main>
-  <footer class="panel-footer"><div class="wrap"><p>&copy; 2026 VinugaK. Based in Sri Lanka.</p></div></footer>
+  </div>
+
+  <!-- Primary Site Header & Sticky Navigation -->
+  <header class="site-header">
+    <div class="wrap nav-wrap">
+      <a href="#top" class="brand-group" aria-label="Vinuga Kisath Home">
+        <span class="brand-monogram">VK</span>
+        <div class="brand-text">
+          <span class="brand-name">Vinuga Kisath</span>
+          <span class="brand-title">Cybersecurity &amp; Networking</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="nav-desktop" aria-label="Main Navigation">
+        <ul class="nav-links" role="list">
+          {navSections.map((sec) => (
+            <li>
+              <a href={`#${sec.id}`} class="nav-link" data-port={sec.id}>
+                <span class="nav-link-port">{sec.port}</span>
+                <span>{sec.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- Command Palette & Fast Actions -->
+      <div class="nav-actions">
+        <button type="button" class="cmd-trigger-btn" data-open-cmd aria-label="Open Command Palette (Ctrl+K or Cmd+K)">
+          <Icon name="icon-search" size={14} />
+          <span>Quick Find</span>
+          <kbd class="cmd-kbd">⌘K</kbd>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Page Slot -->
+  <main id="main">
+    <slot />
+  </main>
+
+  <!-- Production Quality Footer -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-left">
+        <span class="footer-copy">&copy; {new Date().getFullYear()} Vinuga Kisath. Built with Astro &amp; TypeScript.</span>
+        <span class="footer-sub">Colombo, Sri Lanka · ICBT Higher Diploma &amp; Cardiff Metropolitan University</span>
+      </div>
+      <div class="footer-links">
+        <a href="#top" class="footer-link">Back to top ↑</a>
+        <a href="https://github.com/Vinuga530" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+        <a href="https://www.linkedin.com/in/vinugakisath/" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
+        <button type="button" class="footer-link" data-open-cmd style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;">Command Palette (⌘K)</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Command Palette Modal -->
+  <CommandPalette />
+
+  <!-- Client Telemetry & Scroll Spy Script -->
   <script>
-    const ports = document.querySelectorAll<HTMLAnchorElement>('.port-item');
-    const sections = document.querySelectorAll<HTMLElement>('.panel-section');
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const step = 400 / ports.length;
-      ports.forEach((port, i) => setTimeout(() => {
-        port.classList.add('flash-sequence');
-        setTimeout(() => port.classList.remove('flash-sequence'), 400);
-      }, i * step));
+    // Live Colombo Clock
+    function updateClock() {
+      const clockEl = document.getElementById('colombo-clock');
+      if (!clockEl) return;
+      const now = new Date();
+      // Colombo is UTC+5:30
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Colombo',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      };
+      clockEl.textContent = new Intl.DateTimeFormat('en-GB', options).format(now);
     }
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        for (const port of ports) {
-          const on = port.dataset.port === entry.target.id;
-          port.classList.toggle('is-active', on);
-          if (on) port.setAttribute('aria-current', 'true'); else port.removeAttribute('aria-current');
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Navigation Scroll Spy
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link');
+    const sections = document.querySelectorAll<HTMLElement>('.site-section');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const currentId = entry.target.id;
+          navLinks.forEach((link) => {
+            const isActive = link.dataset.port === currentId;
+            link.classList.toggle('is-active', isActive);
+            if (isActive) {
+              link.setAttribute('aria-current', 'true');
+            } else {
+              link.removeAttribute('aria-current');
+            }
+          });
         }
-      }
-    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+      },
+      { rootMargin: '-15% 0px -65% 0px', threshold: 0 }
+    );
+
     sections.forEach((s) => observer.observe(s));
   </script>
 </body>

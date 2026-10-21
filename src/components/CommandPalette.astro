@@ -1,0 +1,468 @@
+---
+import Icon from './Icon.astro';
+import { navSections, projects, labNotes } from '../data/config';
+---
+
+<div id="cmd-palette-backdrop" class="cmd-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command Palette">
+  <div class="cmd-modal" id="cmd-modal">
+    <div class="cmd-search-bar">
+      <Icon name="icon-search" size={18} />
+      <input
+        type="text"
+        id="cmd-input"
+        class="cmd-input"
+        placeholder="Type a command, project, note, or section (or press Esc to close)..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <span class="cmd-esc-badge">ESC</span>
+    </div>
+
+    <div class="cmd-results" id="cmd-results" role="listbox">
+      <!-- Navigation Group -->
+      <div class="cmd-group" data-group="navigation">
+        <div class="cmd-group-title">Navigation</div>
+        {navSections.map((item) => (
+          <a href={`#${item.id}`} class="cmd-item" role="option" data-search={`goto ${item.label} ${item.id}`}>
+            <div class="cmd-item-left">
+              <span class="cmd-item-port">{item.port}</span>
+              <span class="cmd-item-label">{item.label}</span>
+            </div>
+            <span class="cmd-item-hint">Jump to section</span>
+          </a>
+        ))}
+      </div>
+
+      <!-- Projects Group -->
+      <div class="cmd-group" data-group="projects">
+        <div class="cmd-group-title">Projects</div>
+        {projects.map((p) => (
+          <a href={`#projects`} class="cmd-item" role="option" data-search={`project ${p.title} ${p.meta} ${p.tagline}`}>
+            <div class="cmd-item-left">
+              <Icon name="icon-terminal" size={16} />
+              <span class="cmd-item-label">{p.title}</span>
+            </div>
+            <span class="cmd-item-badge">{p.status}</span>
+          </a>
+        ))}
+      </div>
+
+      <!-- Field Notes Group -->
+      <div class="cmd-group" data-group="notes">
+        <div class="cmd-group-title">Lab Notes</div>
+        {labNotes.map((note) => (
+          <button type="button" class="cmd-item cmd-note-trigger" role="option" data-note-id={note.id} data-search={`note ${note.title} ${note.category}`}>
+            <div class="cmd-item-left">
+              <Icon name="icon-book-open" size={16} />
+              <span class="cmd-item-label">{note.title}</span>
+            </div>
+            <span class="cmd-item-hint">{note.category}</span>
+          </button>
+        ))}
+      </div>
+
+      <!-- Actions Group -->
+      <div class="cmd-group" data-group="actions">
+        <div class="cmd-group-title">Actions & Contact</div>
+        <button type="button" class="cmd-item" id="cmd-copy-email" role="option" data-search="copy email address mail contact">
+          <div class="cmd-item-left">
+            <Icon name="icon-copy" size={16} />
+            <span class="cmd-item-label">Copy Email (vkisath2@gmail.com)</span>
+          </div>
+          <span class="cmd-item-hint">Clipboard</span>
+        </button>
+        <a href="https://github.com/Vinuga530" target="_blank" rel="noopener noreferrer" class="cmd-item" role="option" data-search="github profile code vinuga530">
+          <div class="cmd-item-left">
+            <Icon name="icon-social-github" size={16} />
+            <span class="cmd-item-label">Open GitHub Profile (@Vinuga530)</span>
+          </div>
+          <Icon name="icon-navigation-external-link" size={14} />
+        </a>
+        <a href="https://www.linkedin.com/in/vinugakisath/" target="_blank" rel="noopener noreferrer" class="cmd-item" role="option" data-search="linkedin profile network vinugakisath">
+          <div class="cmd-item-left">
+            <Icon name="icon-social-linkedin" size={16} />
+            <span class="cmd-item-label">Open LinkedIn Profile (/in/vinugakisath)</span>
+          </div>
+          <Icon name="icon-navigation-external-link" size={14} />
+        </a>
+      </div>
+    </div>
+
+    <div class="cmd-footer">
+      <div class="cmd-tips">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> select</span>
+        <span><kbd>esc</kbd> dismiss</span>
+      </div>
+      <span class="cmd-status-indicator">VinugaK · Telemetry v2.5</span>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification for actions -->
+<div id="cmd-toast" class="cmd-toast" aria-live="assertive" role="alert">
+  <Icon name="icon-check" size={16} />
+  <span id="cmd-toast-msg">Email copied to clipboard!</span>
+</div>
+
+<style>
+  .cmd-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(4, 7, 10, 0.75);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: clamp(3rem, 15vh, 8rem);
+    padding-inline: 1rem;
+    animation: fadeIn 0.15s ease-out;
+  }
+
+  .cmd-backdrop.is-open {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .cmd-modal {
+    width: 100%;
+    max-width: 640px;
+    background: #0f1419;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(56, 189, 248, 0.15);
+    overflow: hidden;
+    animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes scaleIn {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .cmd-search-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-muted);
+  }
+
+  .cmd-input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    outline: none;
+  }
+
+  .cmd-input::placeholder {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .cmd-esc-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    padding: 0.15rem 0.4rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  .cmd-results {
+    max-height: 380px;
+    overflow-y: auto;
+    padding: var(--space-3);
+  }
+
+  .cmd-group {
+    margin-bottom: var(--space-3);
+  }
+
+  .cmd-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .cmd-group-title {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .cmd-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    text-align: left;
+    transition: all 0.12s ease;
+  }
+
+  .cmd-item:hover,
+  .cmd-item.is-selected {
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--text-primary);
+    outline: none;
+  }
+
+  .cmd-item-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .cmd-item-port {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    font-weight: 600;
+  }
+
+  .cmd-item-label {
+    font-weight: 500;
+  }
+
+  .cmd-item-hint {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+  }
+
+  .cmd-item-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--accent-signal);
+    background: rgba(16, 185, 129, 0.1);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .cmd-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-5);
+    background: rgba(0, 0, 0, 0.25);
+    border-top: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+  }
+
+  .cmd-tips {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .cmd-tips kbd {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-subtle);
+    border-radius: 3px;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.625rem;
+  }
+
+  .cmd-toast {
+    position: fixed;
+    bottom: var(--space-5);
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: #0f172a;
+    border: 1px solid var(--accent-signal);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cmd-toast.is-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const backdrop = document.getElementById('cmd-palette-backdrop');
+  const input = document.getElementById('cmd-input') as HTMLInputElement | null;
+  const copyBtn = document.getElementById('cmd-copy-email');
+  const toast = document.getElementById('cmd-toast');
+  const toastMsg = document.getElementById('cmd-toast-msg');
+
+  function openPalette() {
+    if (!backdrop || !input) return;
+    backdrop.classList.add('is-open');
+    backdrop.setAttribute('aria-hidden', 'false');
+    input.value = '';
+    filterItems('');
+    input.focus();
+    selectFirstVisible();
+  }
+
+  function closePalette() {
+    if (!backdrop) return;
+    backdrop.classList.remove('is-open');
+    backdrop.setAttribute('aria-hidden', 'true');
+  }
+
+  // Keyboard shortcut listener: Cmd+K or Ctrl+K
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (backdrop?.classList.contains('is-open')) {
+        closePalette();
+      } else {
+        openPalette();
+      }
+    } else if (e.key === 'Escape' && backdrop?.classList.contains('is-open')) {
+      closePalette();
+    }
+  });
+
+  // Global triggers
+  document.querySelectorAll('[data-open-cmd]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openPalette();
+    });
+  });
+
+  backdrop?.addEventListener('click', (e) => {
+    if (e.target === backdrop) {
+      closePalette();
+    }
+  });
+
+  function showToast(message: string) {
+    if (!toast || !toastMsg) return;
+    toastMsg.textContent = message;
+    toast.classList.add('is-visible');
+    setTimeout(() => {
+      toast.classList.remove('is-visible');
+    }, 2800);
+  }
+
+  copyBtn?.addEventListener('click', () => {
+    navigator.clipboard.writeText('vkisath2@gmail.com').then(() => {
+      closePalette();
+      showToast('Email (vkisath2@gmail.com) copied to clipboard');
+    });
+  });
+
+  // Filter items in command list
+  function filterItems(query: string) {
+    const q = query.trim().toLowerCase();
+    const items = document.querySelectorAll<HTMLElement>('.cmd-item');
+    let visibleCount = 0;
+
+    items.forEach((item) => {
+      const searchData = (item.dataset.search || '').toLowerCase();
+      const textContent = (item.textContent || '').toLowerCase();
+      const matches = !q || searchData.includes(q) || textContent.includes(q);
+
+      item.style.display = matches ? 'flex' : 'none';
+      if (matches) visibleCount++;
+    });
+
+    // Hide empty groups
+    document.querySelectorAll<HTMLElement>('.cmd-group').forEach((group) => {
+      const hasVisibleChildren = Array.from(group.querySelectorAll<HTMLElement>('.cmd-item')).some(
+        (el) => el.style.display !== 'none'
+      );
+      group.style.display = hasVisibleChildren ? 'block' : 'none';
+    });
+  }
+
+  input?.addEventListener('input', (e) => {
+    const target = e.target as HTMLInputElement;
+    filterItems(target.value);
+    selectFirstVisible();
+  });
+
+  function getVisibleItems(): HTMLElement[] {
+    return Array.from(document.querySelectorAll<HTMLElement>('.cmd-item')).filter(
+      (el) => el.style.display !== 'none'
+    );
+  }
+
+  function selectFirstVisible() {
+    const visible = getVisibleItems();
+    visible.forEach((el, i) => {
+      el.classList.toggle('is-selected', i === 0);
+    });
+  }
+
+  // Arrow key navigation
+  input?.addEventListener('keydown', (e) => {
+    const visible = getVisibleItems();
+    if (visible.length === 0) return;
+
+    let currentIndex = visible.findIndex((el) => el.classList.contains('is-selected'));
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      currentIndex = (currentIndex + 1) % visible.length;
+      visible.forEach((el, i) => el.classList.toggle('is-selected', i === currentIndex));
+      visible[currentIndex]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      currentIndex = (currentIndex - 1 + visible.length) % visible.length;
+      visible.forEach((el, i) => el.classList.toggle('is-selected', i === currentIndex));
+      visible[currentIndex]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const selected = visible[currentIndex];
+      if (selected) {
+        selected.click();
+        closePalette();
+      }
+    }
+  });
+
+  // Lab note trigger in command palette
+  document.querySelectorAll('.cmd-note-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const noteId = btn.getAttribute('data-note-id');
+      if (noteId) {
+        const noteEl = document.getElementById(noteId);
+        if (noteEl) {
+          noteEl.scrollIntoView({ behavior: 'smooth' });
+          const detailsEl = noteEl.querySelector('details');
+          if (detailsEl) detailsEl.open = true;
+        }
+      }
+    });
+  });
+</script>

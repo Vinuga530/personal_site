@@ -1,61 +1,365 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { projects, skills, experience, education, focus, contacts } from '../data/config';
+import NetworkTopology from '../components/NetworkTopology.astro';
+import SkillMatrix from '../components/SkillMatrix.astro';
+import LabNotesSection from '../components/LabNotesSection.astro';
+import {
+  site,
+  heroMetrics,
+  experience,
+  education,
+  projects,
+  contacts,
+} from '../data/config';
 ---
+
 <Base>
-  <section id="about" class="panel-section hero">
-    <h1>Learning how networks work, and how they fail.</h1>
-    <p class="lede">I'm Vinuga Kisath, a network and cyber security student and IT intern in Sri Lanka.</p>
-    <p class="cta"><a class="link" href="#projects">View projects</a><a class="link" href="#contact">Get in touch</a></p>
-    <p class="link-status">
-      <span class="status-led" aria-hidden="true"></span>
-      <span class="status-key">Link up</span>
-      <span class="status-detail">ICBT Higher Diploma in Network Technology &amp; Cyber Security. IT intern at Powernet.</span>
-    </p>
-    <div class="text-body">
-      <p>I'm studying how networks are built and how they get attacked, so I can help defend them. Most of my learning happens by setting something up, breaking it and working out why.</p>
-      <p>Alongside the diploma I work in IT at Powernet, which keeps the theory tied to real equipment and real requirements. I'm early in my career and still building depth in networking, firewalls, Linux and Python.</p>
+  <!-- Hero Section -->
+  <section class="wrap site-section hero-section" id="hero">
+    <div class="hero-main">
+      <div class="hero-status-pill">
+        <span class="telemetry-pulse" aria-hidden="true"></span>
+        <span>{site.status}</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Understanding systems. <span class="highlight">Securing networks.</span> Building practical infrastructure.
+      </h1>
+
+      <p class="hero-lede">
+        I'm <strong>Vinuga Kisath</strong> — a network technology and cybersecurity student at ICBT Campus (in collaboration with Cardiff Metropolitan University) and an IT intern at Powernet (Pvt) Ltd in Sri Lanka. I explore how enterprise networks are architected, how protocol attacks unfold, and how to defend systems through disciplined engineering.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#projects" class="btn-primary">
+          <span>View Verified Projects</span>
+          <Icon name="icon-chevron-right" size={16} />
+        </a>
+        <a href="#topology" class="btn-secondary">
+          <Icon name="icon-network" size={16} />
+          <span>Interactive Systems Lab</span>
+        </a>
+        <a href="#contact" class="btn-secondary">
+          <Icon name="icon-social-mail" size={16} />
+          <span>Get in Touch</span>
+        </a>
+      </div>
     </div>
-    <div class="sub">
-      <h2>Experience</h2>
-      <h3>{experience.role}, {experience.org}</h3>
-      <p>{experience.text}</p>
-    </div>
-    <div class="sub">
-      <h2>Education</h2>
-      <dl class="stack-list">{education.map((e) => (<div class="stack-row"><dt>{e.key}</dt><dd>{e.value}</dd></div>))}</dl>
+
+    <!-- Verified Credentials / Academic & Industry Standing Bar -->
+    <div class="hero-metrics-bar" aria-label="Professional and academic status">
+      {heroMetrics.map((metric) => (
+        <div class="metric-card">
+          <span class="metric-label">{metric.label}</span>
+          <span class="metric-val">{metric.value}</span>
+          <span class="metric-sub">{metric.sub}</span>
+        </div>
+      ))}
     </div>
   </section>
-  <section id="projects" class="panel-section">
-    <h2>Projects</h2>
-    <div class="section-body">
+
+  <!-- Section 01: About & Background -->
+  <section class="wrap site-section" id="about">
+    <div class="section-head">
+      <div class="section-eyebrow">
+        <span>01</span>
+        <span class="eyebrow-rule"></span>
+        <span>Identity &amp; Approach</span>
+      </div>
+      <h2 class="section-title">Bridging Theory &amp; Enterprise Equipment</h2>
+      <p class="section-lede">
+        Most of what I know started with curiosity: taking a system apart to observe its behavior, breaking a lab configuration, and troubleshooting it from the protocol level up.
+      </p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-narrative">
+        <p>
+          I am pursuing a <strong>Higher Diploma in Network Technology and Cyber Security</strong> at ICBT Campus, partnered with Cardiff Metropolitan University. My coursework focuses on network routing and switching architectures, stateful firewall configurations, Linux operating system administration, and security risk assessment.
+        </p>
+        <p>
+          Alongside formal studies, my internship at <strong>Powernet (Pvt) Ltd</strong> anchors abstract networking concepts to live physical reality. Interacting directly with rackmount enterprise switches, patch panel termination, edge firewalls, and uninterruptible power supply (UPS) units has reinforced that clean physical wiring and meticulous configuration baselines are just as critical as software defense.
+        </p>
+        <p>
+          I am early in my career and intentional about building deep technical foundations. I spend my time labbing Cisco packet flows, automating repetitive diagnostic scripts in Python and Bash, and studying for the Cisco CCNA (200-301) examination.
+        </p>
+      </div>
+
+      <!-- Specification Sheet Card -->
+      <div class="spec-sheet-card">
+        <div class="spec-sheet-header">
+          <span class="spec-sheet-title">Profile Telemetry</span>
+          <Icon name="icon-cpu" size={16} />
+        </div>
+        <dl class="spec-list">
+          <div class="spec-row">
+            <dt>Location</dt>
+            <dd>{site.location}</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Degree</dt>
+            <dd>{education.degree}</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Current Role</dt>
+            <dd>{experience.role}, {experience.company}</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Primary Focus</dt>
+            <dd>Network Engineering &amp; Perimeter Defense</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Cert Track</dt>
+            <dd>Cisco CCNA (Preparation in progress)</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Key Modules</dt>
+            <dd>{education.modules.slice(0, 3).join(', ')}</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Core Stack</dt>
+            <dd class="mono">Linux, Python, Cisco CLI, Astro</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 02: Experience (Powernet Pvt Ltd) -->
+  <section class="wrap site-section" id="experience">
+    <div class="section-head">
+      <div class="section-eyebrow">
+        <span>02</span>
+        <span class="eyebrow-rule"></span>
+        <span>Work Experience</span>
+      </div>
+      <h2 class="section-title">Practical Enterprise IT Exposure</h2>
+      <p class="section-lede">
+        Direct workplace experience at Powernet (Pvt) Ltd, distinguishing hands-on operational responsibilities from supervised engineering training.
+      </p>
+    </div>
+
+    <div class="experience-card">
+      <div class="exp-header">
+        <div>
+          <h3 class="exp-role-title">
+            <span>{experience.role}</span> · <span class="exp-company">{experience.company}</span>
+          </h3>
+          <span class="mono" style="font-size: 0.8125rem; color: var(--text-muted);">{experience.location}</span>
+        </div>
+        <span class="exp-period">{experience.period}</span>
+      </div>
+
+      <p class="exp-summary">{experience.summary}</p>
+
+      <div class="exp-areas-grid">
+        {experience.areas.map((area) => (
+          <div class="exp-area-item">
+            <div class="exp-area-top">
+              <span class="exp-area-title">{area.title}</span>
+              <span class="exp-area-badge">{area.badge}</span>
+            </div>
+            <p class="exp-area-desc">{area.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 03: Interactive Systems Lab (3D Topology & Packet Simulation) -->
+  <section class="wrap site-section" id="topology">
+    <div class="section-head">
+      <div class="section-eyebrow">
+        <span>03</span>
+        <span class="eyebrow-rule"></span>
+        <span>Interactive Systems Lab</span>
+      </div>
+      <h2 class="section-title">Network Topology &amp; Transmission Engine</h2>
+      <p class="section-lede">
+        An interactive, perspective-rendered simulation of an enterprise network topology. Observe real-time data packets traversing links between perimeter firewalls, core distribution switches, hardened Linux hosts, and client endpoints.
+      </p>
+    </div>
+
+    <NetworkTopology />
+  </section>
+
+  <!-- Section 04: Verified Projects -->
+  <section class="wrap site-section" id="projects">
+    <div class="section-head">
+      <div class="section-eyebrow">
+        <span>04</span>
+        <span class="eyebrow-rule"></span>
+        <span>Verified Work</span>
+      </div>
+      <h2 class="section-title">Production Systems &amp; Engineering Projects</h2>
+      <p class="section-lede">
+        Genuine technical systems, client production websites, offline browser tools, and architectural concepts. No fabricated metrics or inflated claims.
+      </p>
+    </div>
+
+    <div class="projects-grid">
       {projects.map((p) => (
-        <article class="project"><h3>{p.title}</h3><p>{p.text}</p><p class="project-meta">{p.meta}</p>{p.href && <p><a class="link" href={p.href} target="_blank" rel="noopener noreferrer">View repository</a></p>}</article>
+        <article class="project-card">
+          <div class="project-top">
+            <div class="project-meta-row">
+              <span class="project-category-tag">{p.category}</span>
+              <span class="project-status-tag">{p.status}</span>
+            </div>
+
+            <h3 class="project-title">{p.title}</h3>
+            <p class="project-tagline">{p.tagline}</p>
+            <p class="project-desc">{p.description}</p>
+
+            <ul class="project-highlights-list" role="list">
+              {p.highlights.map((h) => (
+                <li>
+                  <span class="highlight-bullet">▹</span>
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="project-footer">
+            <div class="project-tech-tags">
+              {p.tech.map((t) => (
+                <span class="tech-tag">{t}</span>
+              ))}
+            </div>
+
+            <div class="project-links">
+              {p.repo && (
+                <a href={p.repo} target="_blank" rel="noopener noreferrer" class="project-link-btn">
+                  <Icon name="icon-social-github" size={15} />
+                  <span>Repository</span>
+                </a>
+              )}
+              {p.demo && (
+                <a href={p.demo} target="_blank" rel="noopener noreferrer" class="project-link-btn">
+                  <Icon name="icon-navigation-external-link" size={15} />
+                  <span>Live Site</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </article>
       ))}
     </div>
   </section>
-  <section id="skills" class="panel-section">
-    <h2>Skills</h2>
-    <div class="section-body">
-      <dl class="stack-list">{skills.map((k) => (<div class="stack-row"><dt>{k.key}</dt><dd>{k.value}</dd></div>))}</dl>
-      <h3 class="sub">Current focus <span class="project-meta">Updated {focus.updated}</span></h3>
-      <p>{focus.items.join(', ')}.</p>
+
+  <!-- Section 05: Skills Matrix -->
+  <section class="wrap site-section" id="skills">
+    <div class="section-head">
+      <div class="section-eyebrow">
+        <span>05</span>
+        <span class="eyebrow-rule"></span>
+        <span>Competencies &amp; Tooling</span>
+      </div>
+      <h2 class="section-title">Domain-Categorized Skills Matrix</h2>
+      <p class="section-lede">
+        Structured technical skills organized by functional domains. Each entry reflects hands-on classroom labbing or workplace exposure at Powernet.
+      </p>
+    </div>
+
+    <SkillMatrix />
+  </section>
+
+  <!-- Section 06: Lab Notes / Field Logs -->
+  <section class="wrap site-section" id="labnotes">
+    <div class="section-head">
+      <div class="section-eyebrow">
+        <span>06</span>
+        <span class="eyebrow-rule"></span>
+        <span>Field Notes &amp; Writing</span>
+      </div>
+      <h2 class="section-title">Engineering Notes &amp; Troubleshooting Logs</h2>
+      <p class="section-lede">
+        Short, focused technical write-ups covering enterprise VLAN segmentation, stateful firewall policies, client-side browser tools, and Linux network diagnostic routines. Click any note to expand.
+      </p>
+    </div>
+
+    <LabNotesSection />
+  </section>
+
+  <!-- Section 07: Contact Section -->
+  <section class="wrap site-section" id="contact">
+    <div class="section-head">
+      <div class="section-eyebrow">
+        <span>07</span>
+        <span class="eyebrow-rule"></span>
+        <span>Initiate Contact</span>
+      </div>
+      <h2 class="section-title">Get in Touch</h2>
+      <p class="section-lede">
+        I welcome professional connections, discussions regarding network architecture or cybersecurity, and relevant early-career opportunities.
+      </p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-content">
+        <p>
+          Whether you want to discuss enterprise networking setups, collaborate on technical projects, or speak about junior engineering roles, feel free to reach out via email or connect with me on LinkedIn and GitHub.
+        </p>
+
+        <div class="contact-cards-list">
+          {contacts.map((c) => (
+            <a
+              href={c.href}
+              class="contact-card-item"
+              target={c.external ? '_blank' : undefined}
+              rel={c.external ? 'noopener noreferrer' : undefined}
+            >
+              <div class="contact-item-left">
+                <div class="contact-icon-frame">
+                  <Icon name={c.icon} size={20} />
+                </div>
+                <div class="contact-item-details">
+                  <span class="contact-channel-name">{c.channel}</span>
+                  <span class="contact-address">{c.label}</span>
+                  <span class="contact-purpose">{c.detail}</span>
+                </div>
+              </div>
+              {c.external && <Icon name="icon-navigation-external-link" size={16} />}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Quick Copy Box -->
+      <div class="copy-direct-box">
+        <h3 class="direct-box-title">Direct Inquiries</h3>
+        <p class="direct-box-desc">
+          Prefer using your default email client? Click below to copy my primary email address to your clipboard or send a message directly.
+        </p>
+
+        <button type="button" class="copy-email-btn" id="copy-primary-email">
+          <Icon name="icon-copy" size={16} />
+          <span>Copy vkisath2@gmail.com</span>
+        </button>
+
+        <a href="mailto:vkisath2@gmail.com?subject=Inquiry%20from%20vinugakisath.site" class="btn-primary" style="justify-content: center;">
+          <Icon name="icon-social-mail" size={16} />
+          <span>Send Direct Email</span>
+        </a>
+      </div>
     </div>
   </section>
-  <section id="contact" class="panel-section">
-    <h2>Contact</h2>
-    <div class="section-body">
-      <p>Open to professional connections, collaboration and relevant opportunities in networking and security.</p><ul class="contact-list" role="list">
-      {contacts.map((c) => (
-        <li>
-          <span class="contact-channel">{c.channel}</span>
-          <a href={c.href} class="link icon-text" target={c.external ? '_blank' : undefined} rel={c.external ? 'noopener noreferrer' : undefined}>
-            <Icon name={c.icon} size={20} />{c.label}
-            {c.external && <Icon name="icon-navigation-external-link" size={16} />}
-          </a>
-        </li>
-      ))}
-    </ul></div>
-  </section>
+
+  <!-- Client-side script for copy button -->
+  <script>
+    const copyPrimaryBtn = document.getElementById('copy-primary-email');
+    copyPrimaryBtn?.addEventListener('click', () => {
+      navigator.clipboard.writeText('vkisath2@gmail.com').then(() => {
+        const span = copyPrimaryBtn.querySelector('span');
+        if (span) {
+          const orig = span.textContent;
+          span.textContent = 'Copied to clipboard!';
+          setTimeout(() => {
+            span.textContent = orig;
+          }, 2500);
+        }
+      });
+    });
+  </script>
 </Base>

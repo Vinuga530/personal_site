@@ -1,0 +1,241 @@
+---
+import { skillCategories } from '../data/config';
+import Icon from './Icon.astro';
+---
+
+<div class="skills-explorer" id="skills-explorer">
+  <!-- Filter Pills -->
+  <div class="skills-filter-bar" role="tablist" aria-label="Skill domains">
+    <button type="button" class="filter-tab is-active" role="tab" aria-selected="true" data-filter="all">
+      <span>All Competencies</span>
+    </button>
+    {skillCategories.map((cat) => (
+      <button type="button" class="filter-tab" role="tab" aria-selected="false" data-filter={cat.id}>
+        <Icon name={cat.icon} size={14} />
+        <span>{cat.name}</span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Skill Categories Display -->
+  <div class="skills-grid">
+    {skillCategories.map((cat) => (
+      <div class="skill-category-card" data-category={cat.id}>
+        <div class="cat-header">
+          <div class="cat-title-wrap">
+            <span class="cat-icon-frame">
+              <Icon name={cat.icon} size={18} />
+            </span>
+            <div>
+              <h3 class="cat-name">{cat.name}</h3>
+              <p class="cat-desc">{cat.description}</p>
+            </div>
+          </div>
+          <span class="cat-count-badge">{cat.items.length} skills</span>
+        </div>
+
+        <div class="skill-items-list">
+          {cat.items.map((item) => (
+            <div class="skill-item-pill">
+              <div class="skill-main">
+                <span class="verified-dot" aria-hidden="true" title="Verified Hands-On Competency"></span>
+                <span class="skill-name">{item.name}</span>
+              </div>
+              <span class="skill-detail">{item.detail}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .skills-explorer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .skills-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-tab:hover {
+    color: var(--text-primary);
+    border-color: var(--text-muted);
+  }
+
+  .filter-tab.is-active {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan-light);
+    font-weight: 600;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+    gap: var(--space-4);
+  }
+
+  .skill-category-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    transition: all 0.25s ease;
+  }
+
+  .skill-category-card:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .cat-title-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .cat-icon-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent-cyan);
+    flex-shrink: 0;
+  }
+
+  .cat-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .cat-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0.15rem 0 0 0;
+  }
+
+  .cat-count-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .skill-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .skill-item-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: var(--space-2) var(--space-3);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .skill-item-pill:hover {
+    background: rgba(56, 189, 248, 0.05);
+    border-color: rgba(56, 189, 248, 0.2);
+  }
+
+  .skill-main {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .verified-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent-signal);
+    flex-shrink: 0;
+  }
+
+  .skill-name {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .skill-detail {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding-left: calc(6px + var(--space-2));
+  }
+</style>
+
+<script>
+  const filterTabs = document.querySelectorAll<HTMLButtonElement>('.filter-tab');
+  const skillCards = document.querySelectorAll<HTMLElement>('.skill-category-card');
+
+  filterTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const filter = tab.dataset.filter || 'all';
+
+      filterTabs.forEach((t) => {
+        const isActive = t === tab;
+        t.classList.toggle('is-active', isActive);
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      skillCards.forEach((card) => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
